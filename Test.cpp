@@ -1,3 +1,4 @@
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"
@@ -14,6 +15,5 @@ TEST_CASE("Example")
     g.addEdge(1, 4, 1);
     g.addEdge(2, 3, 1);
     g.addEdge(3, 4, 1);
-    //CHECK(graph::Algorithms::hasCycle(g) == true)
+    CHECK(graph::Algorithms::hasCycle(g) == true);
 }
-
