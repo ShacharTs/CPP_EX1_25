@@ -15,5 +15,6 @@ TEST_CASE("Example")
     g.addEdge(1, 4, 1);
     g.addEdge(2, 3, 1);
     g.addEdge(3, 4, 1);
+    g.print_graph();
     CHECK(graph::Algorithms::hasCycle(g) == true);
 }

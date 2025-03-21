@@ -17,7 +17,7 @@ namespace graph {
         Graph::~Graph() {
             cout << "Graph Destructor cleaning" << endl;
             for (int i = 0; i < this->numVertices; i++) {
-                Node* curr = this->adjacencyList[i];
+                const Node* curr = this->adjacencyList[i];
                 while (curr != nullptr) {
                     const Node* temp = curr;
                     curr = curr->next;
@@ -28,7 +28,12 @@ namespace graph {
             delete[] this->adjacencyList;
         }
 
-
+        /**
+         * Connect 2 nodes together from both side
+         * @param src source node
+         * @param dest destination node
+         * @param weight node weight
+         */
         void Graph::addEdge(const int src, const int dest, int weight) {
              // creating new node for src to dest
              Node* newNode = new Node(dest,weight,adjacencyList[src]);
@@ -38,13 +43,25 @@ namespace graph {
              adjacencyList[dest] = newNode;
         }
 
-        void Graph::removeEdge(int src, int dest) {
+        /**
+         * Undirected graph needs to remove both side to fully remove both edges
+         * @param src the source node
+         * @param dest the destination node
+         */
+        void Graph::removeEdge(const int src, const int dest) {
              removeEdgeHelper(src,dest,nullptr,adjacencyList[src]);
-
              removeEdgeHelper(dest,src,nullptr,adjacencyList[dest]);
         }
 
-        void Graph::removeEdgeHelper(int src, int dest, Node *prev, Node *current) {
+        /**
+         *
+         * A helper method to remove the edge in recursive way
+         * @param src the source node
+         * @param dest the destination node
+         * @param prev a pointer to previous node
+         * @param current a pointer to current node
+         */
+        void Graph::removeEdgeHelper(const int src, const int dest, Node *prev, Node *current) {
              // base case if current = nullptr
              if (current == nullptr) {
                  return;
@@ -63,10 +80,12 @@ namespace graph {
              removeEdgeHelper(src,dest,current,current->next);
          }
 
+        /**
+         * This method will print each node it path in the graph in linear way
+         */
         void Graph::print_graph() {
              for (int i = 0; i < this->numVertices; i++) {
                  cout << "Vertice: "<< i << " -> ";
-
                  // Traverse the linked list
                  Node* current = adjacencyList[i];
                  while (current != nullptr) {
@@ -76,9 +95,6 @@ namespace graph {
                  cout << "NULL" << endl;
              }
          }
-
-
-
 };
 
 
