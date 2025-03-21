@@ -1,11 +1,17 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
-#include "Node.cpp"
-
 namespace graph {
 
+    struct Node {
+        int dest;
+        int weight;
+        Node* next;
+        Node(const int dest, const int weight, Node* next = nullptr) : dest(dest), weight(weight), next(next) {}
+    };
+
     class Graph {
+    private:
         int numVertices;
         Node** adjacencyList;
         void removeEdgeHelper(int src, int dest, Node* prev, Node* current);
@@ -16,8 +22,6 @@ namespace graph {
         void addEdge(int src, int dest, int weight = 1);
         void removeEdge(int src, int dest);
         void print_graph();
-
-
     };
 
 }
