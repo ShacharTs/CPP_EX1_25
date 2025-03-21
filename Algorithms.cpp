@@ -12,7 +12,7 @@ namespace graph {
 
     void Algorithms::bfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        bool* visited = new bool[size] {false};
+        const auto visited = new bool[size] {false};
         Queue q(size);
 
         visited[source] = true;
@@ -20,10 +20,10 @@ namespace graph {
         cout << "Starting BFS from node: " << source << endl;
 
         while (!q.isEmpty()) {
-            int current = q.getFront();
+            const int current = q.getFront();
             q.dequeue();
             cout << "Visited Node: " << current << endl;
-            Node* currentNode = g.adjacencyList[current];
+            const Node* currentNode = g.adjacencyList[current];
             while (currentNode != nullptr) {
                 if (!visited[currentNode->dest]) {
                     visited[currentNode->dest] = true;
