@@ -11,12 +11,11 @@ namespace graph {
     };
 
     class Graph {
-    private:
         int numVertices;
-        Node** adjacencyList;
         void removeEdgeHelper(int src, int dest, Node* prev, Node* current);
 
     public:
+        Node** adjacencyList;
         explicit Graph(int vertices);
         ~Graph();
         void addEdge(int src, int dest, int weight = 1);

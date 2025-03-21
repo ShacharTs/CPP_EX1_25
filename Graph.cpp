@@ -41,6 +41,7 @@ namespace graph {
              // creating new node for dest to src
              newNode = new Node(src,weight,adjacencyList[dest]);
              adjacencyList[dest] = newNode;
+
         }
 
         /**
@@ -50,7 +51,10 @@ namespace graph {
          */
         void Graph::removeEdge(const int src, const int dest) {
              removeEdgeHelper(src,dest,nullptr,adjacencyList[src]);
+
              removeEdgeHelper(dest,src,nullptr,adjacencyList[dest]);
+             cout << "Removed edge (" <<src << "," << dest <<")" << endl;
+
         }
 
         /**

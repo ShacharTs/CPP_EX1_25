@@ -10,5 +10,6 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 # Add the source files
 add_executable(CPP_EX1_25 Test.cpp Graph.cpp
         Algorithms.cpp
+        Queue.cpp
 
 )
