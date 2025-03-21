@@ -1,0 +1,3 @@
+C:/Users/shach/Documents/GitHub/CPP_EX1_25/cmake-build-debug/CMakeFiles/CPP_EX1_25.dir
+C:/Users/shach/Documents/GitHub/CPP_EX1_25/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/shach/Documents/GitHub/CPP_EX1_25/cmake-build-debug/CMakeFiles/rebuild_cache.dir

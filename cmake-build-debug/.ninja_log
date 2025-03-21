@@ -1,0 +1,10 @@
+# ninja log v6
+33	166	7642651626965081	CMakeFiles/CPP_EX1_25.dir/Node.cpp.obj	2734f801a0eb3f48
+8	128	7642651764955926	CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj	89bb0a5645d3b1a
+20	496	7642651626835059	CMakeFiles/CPP_EX1_25.dir/Graph.cpp.obj	3aa9205256d34b9e
+9	147	7642657462452342	CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj	89bb0a5645d3b1a
+21	497	7642657462572358	CMakeFiles/CPP_EX1_25.dir/Graph.cpp.obj	3aa9205256d34b9e
+33	506	7642657462692352	CMakeFiles/CPP_EX1_25.dir/main.cpp.obj	2edec2cafec2bcce
+10	140	7642659351516578	CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj	89bb0a5645d3b1a
+8	132	7642668837876822	CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj	89bb0a5645d3b1a
+22	471	7642668838006801	CMakeFiles/CPP_EX1_25.dir/main.cpp.obj	2edec2cafec2bcce
