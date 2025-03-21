@@ -95,6 +95,10 @@ namespace graph {
                  cout << "NULL" << endl;
              }
          }
+
+        int Graph::getNumberOfVertices() {
+             return this->numVertices;
+        }
 };
 
 
