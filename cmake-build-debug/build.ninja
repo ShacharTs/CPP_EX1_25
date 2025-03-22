@@ -73,6 +73,12 @@ build CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj: CXX_COMPILER__CPP_EX1_25_unscanned
   OBJECT_DIR = CMakeFiles\CPP_EX1_25.dir
   OBJECT_FILE_DIR = CMakeFiles\CPP_EX1_25.dir
 
+build CMakeFiles/CPP_EX1_25.dir/PQueue.cpp.obj: CXX_COMPILER__CPP_EX1_25_unscanned_Debug C$:/Users/shach/Documents/GitHub/CPP_EX1_25/PQueue.cpp || cmake_object_order_depends_target_CPP_EX1_25
+  DEP_FILE = CMakeFiles\CPP_EX1_25.dir\PQueue.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\CPP_EX1_25.dir
+  OBJECT_FILE_DIR = CMakeFiles\CPP_EX1_25.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target CPP_EX1_25
@@ -81,7 +87,7 @@ build CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj: CXX_COMPILER__CPP_EX1_25_unscanned
 #############################################
 # Link the executable CPP_EX1_25.exe
 
-build CPP_EX1_25.exe: CXX_EXECUTABLE_LINKER__CPP_EX1_25_Debug CMakeFiles/CPP_EX1_25.dir/Graph.cpp.obj CMakeFiles/CPP_EX1_25.dir/Algorithms.cpp.obj CMakeFiles/CPP_EX1_25.dir/Queue.cpp.obj CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj
+build CPP_EX1_25.exe: CXX_EXECUTABLE_LINKER__CPP_EX1_25_Debug CMakeFiles/CPP_EX1_25.dir/Graph.cpp.obj CMakeFiles/CPP_EX1_25.dir/Algorithms.cpp.obj CMakeFiles/CPP_EX1_25.dir/Queue.cpp.obj CMakeFiles/CPP_EX1_25.dir/Test.cpp.obj CMakeFiles/CPP_EX1_25.dir/PQueue.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\CPP_EX1_25.dir

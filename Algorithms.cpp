@@ -12,7 +12,7 @@ namespace graph {
 
     void Algorithms::bfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        const auto visited = new bool[size] {false};
+        auto visited = new bool[size] {false};
         Queue q(size);
 
         visited[source] = true;
@@ -35,35 +35,48 @@ namespace graph {
         delete[] visited;
     }
 
-    Graph Algorithms::dfs(Graph &g, int source) {
-        const int size = g.getNumberOfVertices();
-        Graph dfsGraph(size);
-
-        return dfsGraph;
+    void dfsRec(Graph &g,bool visited[], int source,int size) {
+        visited[source] = true;
+        cout << "Starting DFS from node: " << source << endl;
+        for (int i = 0; i < size; i++) {
+            if (visited[i] == false) {
+                dfsRec(g,visited,i,size);
+            }
+        }
     }
 
-    Graph Algorithms::dijkstra(Graph &g, int source) {
+    void Algorithms::dfs(Graph &g, int source) {
+        const int size = g.getNumberOfVertices();
+        bool* visited = new bool[size] {false};
+        dfsRec(g,visited,source,size);
+
+        delete[] visited;
+    }
+
+
+
+    void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         Graph dijkstraGraph(size);
 
 
-        return dijkstraGraph;
+
     }
 
-    Graph Algorithms::prim(Graph &g, int source) {
+    void Algorithms::prim(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         Graph primGraph(size);
 
 
-        return primGraph;
+
     }
 
-    Graph Algorithms::kruskal(Graph &g, int source) {
+    void Algorithms::kruskal(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         Graph kruskalGraph(size);
 
 
-        return kruskalGraph;
+
     }
 }
 

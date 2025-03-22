@@ -12,5 +12,6 @@ add_executable(CPP_EX1_25 Graph.cpp
         Algorithms.cpp
         Queue.cpp
         Test.cpp
+        PQueue.cpp
 
 )

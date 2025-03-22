@@ -26,8 +26,23 @@ TEST_CASE("Test BFS on Graph") {
     cout << "\nRunning BFS starting from node 4:" << endl;
     graph::Algorithms::bfs(g, 4);
 
-    // Validate if the expected result happens
-    // You can compare visited nodes, or check the output manually
+}
+
+TEST_CASE("Test DFS on Graph") {
+    graph::Graph g(5);
+
+    // Add edges
+    g.addEdge(0, 1, 1);
+    g.addEdge(0, 4, 1);
+    g.addEdge(1, 2, 1);
+    g.addEdge(1, 3, 1);
+    g.addEdge(1, 4, 1);
+    g.addEdge(2, 3, 1);
+    g.addEdge(3, 4, 1);
+
+    cout << "\nRunning DFS starting from node 4:" << endl;
+    graph::Algorithms::dfs(g, 4);
+
 }
 
 TEST_CASE("Test graph edge removal") {

@@ -3,6 +3,7 @@
 
 namespace graph {
 
+
     struct Node {
         int dest;
         int weight;
@@ -14,6 +15,8 @@ namespace graph {
         int numVertices;
         void removeEdgeHelper(int src, int dest, Node* prev, Node* current);
 
+    private:
+        void dfsRec(Graph &g,bool visited[], int source);
     public:
         Node** adjacencyList;
         explicit Graph(int vertices);

@@ -9,10 +9,10 @@ namespace graph {
     public:
         static bool hasCycle(Graph& g);
         static void bfs(Graph& g, int source);
-        Graph dfs(Graph& g, int source);
-        Graph dijkstra (Graph& g, int source);
-        Graph prim (Graph& g, int source);
-        Graph kruskal(Graph& g, int source);
+        static void dfs(Graph& g, int source);
+        static void dijkstra (Graph& g, int source);
+        static void prim (Graph& g, int source);
+        static void kruskal(Graph& g, int source);
     };
 
 }
