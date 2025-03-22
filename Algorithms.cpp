@@ -72,7 +72,11 @@ namespace graph {
     }
 
 
-
+    /**
+     * 
+     * @param g 
+     * @param source 
+     */
     void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         ;
@@ -81,6 +85,11 @@ namespace graph {
 
     }
 
+    /**
+     * 
+     * @param g 
+     * @param source 
+     */
     void Algorithms::prim(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
 
@@ -89,6 +98,11 @@ namespace graph {
 
     }
 
+    /**
+     * 
+     * @param g 
+     * @param source 
+     */
     void Algorithms::kruskal(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
 
