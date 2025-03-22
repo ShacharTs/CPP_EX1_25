@@ -73,13 +73,13 @@ namespace graph {
 
 
     /**
-     * 
+     * My boi dijkstra, check for the shortest path in graph when node got weight
      * @param g Graph
      * @param source Node
      */
     void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        ;
+
 
 
 
