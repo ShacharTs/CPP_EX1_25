@@ -7,7 +7,6 @@
 namespace graph {
     class Algorithms {
     public:
-        static bool hasCycle(Graph& g);
         static void bfs(Graph& g, int source);
         static void dfs(Graph& g, int source);
         static void dijkstra (Graph& g, int source);
