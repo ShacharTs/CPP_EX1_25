@@ -80,7 +80,10 @@ namespace graph {
     void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
 
-
+        // Shachar Next time you read this, please remove the comment
+        // "My boi"
+        // Thank you
+        // Pass Shachar <3
 
 
     }
