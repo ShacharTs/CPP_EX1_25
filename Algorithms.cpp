@@ -35,21 +35,32 @@ namespace graph {
         delete[] visited;
     }
 
-    void dfsRec(Graph &g,bool visited[], int source,int size) {
+    /**
+     *  Helper method to use DFS in recursive way (Idea from GFG)
+     * @param g graph
+     * @param visited array of node visited (Marked True or False)
+     * @param source Node source for dfs
+     * @param sizeGraph the size of graph (in nodes)
+     */
+    void dfsRec(Graph &g,bool visited[], int source,int sizeGraph) {
         visited[source] = true;
         cout << "Starting DFS from node: " << source << endl;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < sizeGraph; i++) {
             if (visited[i] == false) {
-                dfsRec(g,visited,i,size);
+                dfsRec(g,visited,i,sizeGraph);
             }
         }
     }
 
+    /**
+     * Dfs will call its helper method dfsRec to search for all the nodes
+     * @param g Graph
+     * @param source Node (Start Node)
+     */
     void Algorithms::dfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         bool* visited = new bool[size] {false};
         dfsRec(g,visited,source,size);
-
         delete[] visited;
     }
 
@@ -57,7 +68,7 @@ namespace graph {
 
     void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        Graph dijkstraGraph(size);
+        ;
 
 
 
@@ -65,7 +76,7 @@ namespace graph {
 
     void Algorithms::prim(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        Graph primGraph(size);
+
 
 
 
@@ -73,7 +84,7 @@ namespace graph {
 
     void Algorithms::kruskal(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        Graph kruskalGraph(size);
+
 
 
 
