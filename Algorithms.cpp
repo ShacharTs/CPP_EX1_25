@@ -8,6 +8,17 @@ using namespace  std;
 
 namespace graph {
 
+    void resetVisit(bool* visited,int graphSize) {
+        for (int i = 0; i < graphSize; i++) {
+            visited[i] = false;
+        }
+    }
+
+    void resetDist(int* dist,int graphSize) {
+        for (int i = 0; i < graphSize; i++) {
+            dist[i] = INT_MAX;
+        }
+    }
 
     /**
      * Bfs method to look for all the nodes
@@ -16,7 +27,9 @@ namespace graph {
      */
     void Algorithms::bfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        auto visited = new bool[size] {false};
+        bool* visited = new bool[size];
+        resetVisit(visited,size);
+
         Queue q(size);
 
         visited[source] = true;
@@ -67,13 +80,22 @@ namespace graph {
      */
     void Algorithms::dfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        bool* visited = new bool[size] {false};
+        bool* visited = new bool[size];
+
+        resetVisit(visited,size);
+
         dfsRec(g,visited,source,size);
         delete[] visited;
     }
 
 
-
+    /**
+     *
+     * @param dist dist from one node
+     * @param visited
+     * @param distSize
+     * @return
+     */
     int minDist(const int* dist, const bool* visited, const int distSize) {
         int min = INT_MAX;
         int idx = -1;
@@ -91,42 +113,46 @@ namespace graph {
      * @param g Graph
      * @param source Node
      */
-    void Algorithms::dijkstra(Graph &g, int source) {
+    void Algorithms::dijkstra(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
-        int* dist = new int [size];
-        for (int i = 0; i <size; i++) {
-            dist[i] = INT_MAX;
-        }
-        bool* visited = new bool[size] {false};
-        PQueue pq (size);
+        int* dist = new int [size]; // array of the shortest path
+
+        resetDist(dist,size);
+
+        bool* visited = new bool[size];
+        resetVisit(visited,size);
+
+        PQueue pq (size); // add graph size to PQ
         dist[source] = 0; // starting point
 
         for (int i = 0; i < size; i++) {
             const int temp = minDist(dist,visited,size);
-            if (temp == -1) {
+            if (temp == -1) { // if dist is negative, dijkstra will fail
+                cout << "Found negative dist, dijkstra will fail" << endl;
                 break;
             }
             visited[temp] = true;
-            Node* current =g.adjacencyList[temp];
+             Node* current =g.adjacencyList[temp];
             while (current!=nullptr) {
-                const int neighbor = current->dest;
-                const int weight = current->weight;
-
+                const int neighbor = current->dest; // neighbor node
+                const int weight = current->weight; // neighbor weight
+                // checks few conditions
+                // 1) if node already visited
+                // 2) checks if (the current dist path plus new weight) is less than a neighbor total path
                 if (!visited[neighbor] && dist[temp] + weight < dist[neighbor]) {
-                    dist[neighbor] = dist[temp] + weight;
+                    dist[neighbor] = dist[temp] + weight; // add the new weight to the dist
                     pq.enqueue(neighbor,dist[neighbor]);
                 }
-                current = current->next;
+                current = current->next; // go to the next node
             }
         }
         cout << "Shortest distances from source node " << source << endl;
         for (int i = 0; i< size; i++) {
             cout << "Node: " << i << " dist: "<< dist[i] << endl;
         }
-
+        // free memory
         delete[] dist;
         delete[] visited;
-
     }
 
     /**
