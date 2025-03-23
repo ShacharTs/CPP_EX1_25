@@ -158,14 +158,50 @@ namespace graph {
     /**
      * 
      * @param g Graph
-     * @param source Node
      */
-    void Algorithms::prim(Graph &g, int source) {
+    void Algorithms::prim(Graph &g) {
         const int size = g.getNumberOfVertices();
+        bool* visited = new bool[size];
+        int* dist = new int [size];
+
+        resetVisit(visited,size);
+        resetDist(dist,size);
+        srand(time(0));
+        int randomNode = (rand() % size);
+        cout << "Random Node: " << randomNode << endl;
+
+        PQueue pq(size);
+        int totalWeight = 0;
+        dist[randomNode] = 0;
+        pq.enqueue(randomNode,dist[randomNode]);
+
+        while (!pq.isEmpty()) {
+            const int current = pq.dequeue(); // pick in greedy algorithm
+            if (visited[current]) {
+                continue;
+            }
+            visited[current] = true;
+
+            Node* currentNode = g.adjacencyList[current];
+            while (currentNode != nullptr) {
+                const int neighbor = currentNode->dest;
+                const int weight = currentNode->weight;
+                if (!visited[neighbor] && dist[current] + weight < dist[neighbor]) {
+                    dist[neighbor] = dist[current] + weight;
+                    pq.enqueue(neighbor,dist[neighbor]);
+                    totalWeight += weight;
+                }
+                currentNode = currentNode->next;
+            }
+
+        }
+        cout << "Total weight of MST: " << totalWeight << endl;
 
 
 
 
+        delete[] visited;
+        delete[] dist;
     }
 
     /**

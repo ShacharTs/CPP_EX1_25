@@ -10,7 +10,7 @@ namespace graph {
         static void bfs(Graph& g, int source);
         static void dfs(Graph& g, int source);
         static void dijkstra (Graph& g, int source);
-        static void prim (Graph& g, int source);
+        static void prim (Graph& g);
         static void kruskal(Graph& g, int source);
     };
 
