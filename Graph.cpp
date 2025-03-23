@@ -103,6 +103,10 @@ namespace graph {
         int Graph::getNumberOfVertices() {
              return this->numVertices;
         }
+
+        int getWeigth(const Node* current) {
+             return current->weight;
+        }
 };
 
 

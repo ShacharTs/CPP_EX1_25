@@ -1,6 +1,7 @@
 #include "Algorithms.hpp"
 #include "Graph.hpp"
 #include "Queue.cpp"
+#include "PQueue.cpp"
 #include <iostream>
 
 using namespace  std;
@@ -72,17 +73,60 @@ namespace graph {
     }
 
 
+
+    int minDist(const int* dist, const bool* visited, const int distSize) {
+        int min = INT_MAX;
+        int idx = -1;
+        for (int i = 0; i< distSize; i++) {
+            if (!visited[i] && dist[i] <min) {
+                min = dist[i];
+                idx = i;
+            }
+        }
+        return idx;
+    }
+
     /**
-     * My boi dijkstra, check for the shortest path in graph when node got weight
+     * Dijkstra, check for the shortest path in graph when node got weight
      * @param g Graph
      * @param source Node
      */
     void Algorithms::dijkstra(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
-        // Shachar Next time you read this, please remove the comment
-        // "My boi"
-        // Thank you
-        // Pass Shachar <3
+        int* dist = new int [size];
+        for (int i = 0; i <size; i++) {
+            dist[i] = INT_MAX;
+        }
+        bool* visited = new bool[size] {false};
+        PQueue pq (size);
+        dist[source] = 0; // starting point
+
+        for (int i = 0; i < size; i++) {
+            const int temp = minDist(dist,visited,size);
+            if (temp == -1) {
+                break;
+            }
+            visited[temp] = true;
+            Node* current =g.adjacencyList[temp];
+            while (current!=nullptr) {
+                const int neighbor = current->dest;
+                const int weight = current->weight;
+
+                if (!visited[neighbor] && dist[temp] + weight < dist[neighbor]) {
+                    dist[neighbor] = dist[temp] + weight;
+                    pq.enqueue(neighbor,dist[neighbor]);
+                }
+                current = current->next;
+            }
+        }
+        cout << "Shortest distances from source node " << source << endl;
+        for (int i = 0; i< size; i++) {
+            cout << "Node: " << i << " dist: "<< dist[i] << endl;
+        }
+
+        delete[] dist;
+        delete[] visited;
+
     }
 
     /**
