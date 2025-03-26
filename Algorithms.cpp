@@ -1,6 +1,5 @@
 #include "Algorithms.hpp"
 #include "Graph.hpp"
-#include "Queue.cpp"
 #include "PQueue.cpp"
 #include "math.h"
 #include <iostream>
@@ -24,10 +23,10 @@ namespace graph {
     // Helper function to print the path from source to node
     void printPath(int* prev, int node) {
         if (node == -1) {
-            return; // Base case: reached the source
+            return;
         }
         printPath(prev, prev[node]); // Recursively print predecessor path
-        cout << node << " "; // Then print current node
+        cout << node << " ";
     }
 
 
@@ -44,8 +43,8 @@ namespace graph {
         bool* visited = new bool[size];
         resetVisit(visited, size);
 
-        // Create an array to hold the parent for each vertex.
-        // Initially, set all parents to -1.
+        // create an array to hold the parent for each vertex.
+        // set all parents to -1.
         int* parent = new int[size];
         for (int i = 0; i < size; ++i) {
             parent[i] = -1;
@@ -79,9 +78,7 @@ namespace graph {
                 currentNode = currentNode->next;
             }
         }
-
-
-
+        // free memory
         delete[] visited;
         return parent;
     }
@@ -107,15 +104,18 @@ namespace graph {
         }
     }
 
+    /**
+     *  NEED TO RETURN INT*
+     * @param g
+     * @param source 
+     * @return 
+     */
     Graph Algorithms::dfs(Graph &g, int source) {
         const int size = g.getNumberOfVertices();
         bool* visited = new bool[size];
         resetVisit(visited, size);
-
         // Create a new graph to hold the DFS tree
         Graph dfsTree(size);
-
-
         dfsRec(g, dfsTree, visited, source);
 
         for (int i = 0; i < size; i++) {
@@ -130,8 +130,8 @@ namespace graph {
 
     /**
      *
-     * @param dist dist from one node
-     * @param visited
+     * @param dist node
+     * @param visited node
      * @param distSize
      * @return
      */
@@ -152,7 +152,7 @@ namespace graph {
      * @param g Graph
      * @param source Node
      */
-    void Algorithms::dijkstra(Graph &g, const int source) {
+    Graph Algorithms::dijkstra(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
         int* dist = new int[size]; // array of the shortest path
         int* prev = new int[size]; // array to store the previous node for each node
@@ -195,7 +195,7 @@ namespace graph {
         cout << "Shortest distances from source node " << source << endl;
         for (int i = 0; i < size; i++) {
             cout << "Node: " << i << " dist: " << dist[i] << " Path: ";
-            printPath(prev, i); // print the path from source to node i
+            printPath(prev, i);
             cout << endl;
         }
 
@@ -203,58 +203,78 @@ namespace graph {
         delete[] dist;
         delete[] visited;
         delete[] prev;
+
+        return g;
     }
 
-
-
-
+    /**
+     *
+     * @param g graph
+     * @return MstGraph
+     */
     Graph Algorithms::prim(Graph &g) {
-    const int size = g.getNumberOfVertices();
-    bool* visited = new bool[size];  // To track which nodes are in the MST
-    int* key = new int[size];        // Key values for vertices
-    Graph MstGraph(size);
+        int size = g.getNumberOfVertices();
+        bool* visited = new bool[size];
+        int* key = new int[size];
+        int* parent = new int[size];
 
-    resetVisit(visited, size);
-    initDistance(key, size);
-
-    PQueue pq(size);
-    key[0] = 0;
-    pq.enqueue(0, key[0]);
-
-    // Perform Prim algorithm and build the MST graph
-    while (!pq.isEmpty()) {
-        PQueue::PQElement *current = pq.dequeue(); // Pick the node with the smallest key value
-        if (visited[current->dest]) {
-            continue;
+        resetVisit(visited, size);
+        initDistance(key, size);
+        for (int i = 0; i < size; i++) {
+            parent[i] = -1;
         }
-        visited[current->dest] = true;  // Mark the node as visited
 
-        Node* currentNode = g.adjacencyList[current->dest];
-        while (currentNode != nullptr) {
-            const int neighbor = currentNode->dest;
-            const int weight = currentNode->weight;
-            // Check if the neighbor is not visited and the current edge weight is less than its current key
-            if (!visited[neighbor] && weight < key[neighbor]) {
-                key[neighbor] = weight;            // Update the key value
-                pq.enqueue(neighbor, key[neighbor]); // Enqueue the neighbor with the new key
-                MstGraph.addEdge(current->dest, neighbor, weight);
+        PQueue pq(size);
+        key[0] = 0;
+        pq.enqueue(0, key[0]);
+
+        int totalMSTCost = 0;
+        while (!pq.isEmpty()) {
+            auto current = pq.dequeue();
+            int u = current->dest;
+            delete current;
+
+            if (visited[u]) continue;
+            visited[u] = true;
+
+            if (parent[u] != -1) {
+                totalMSTCost += key[u];
             }
-            currentNode = currentNode->next;
+
+            // Explore neighbors
+            Node* adj = g.adjacencyList[u];
+            while (adj != nullptr) {
+                int v = adj->dest;
+                int w = adj->weight;
+                if (!visited[v] && w < key[v]) {
+                    key[v] = w;
+                    parent[v] = u;
+                    pq.enqueue(v, key[v]);
+                }
+                adj = adj->next;
+            }
         }
+
+        cout << "Total MST cost: " << totalMSTCost << endl;
+        Graph MstGraph(size);
+        for (int v = 1; v < size; v++) {
+            int u = parent[v];
+            MstGraph.addEdge(u, v, key[v]);
+            cout<< "Adding Edge: (" <<u << "," << v <<")" <<endl;
+        }
+
+        const int target = size - 1;
+        cout << "Path from " << 0 << " to " << target << ": ";
+        dfs(MstGraph,0);
+        cout << endl;
+
+        // free memory
+        delete[] visited;
+        delete[] key;
+        delete[] parent;
+
+        return MstGraph;
     }
-
-
-
-    // Cleanup
-    delete[] visited;
-    delete[] key;
-
-    // Return the MST graph (containing edges that are part of the MST)
-    return MstGraph;
-}
-
-
-
 
 
 
@@ -262,9 +282,8 @@ namespace graph {
     /**
      * 
      * @param g Graph
-     * @param source Node
      */
-    Graph Algorithms::kruskal(Graph &g, int source) {
+    Graph Algorithms::kruskal(Graph &g) {
 
 
 

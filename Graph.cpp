@@ -42,7 +42,6 @@ namespace graph {
              // creating new node for dest to src
              newNode = new Node(src,weight,adjacencyList[dest]);
              adjacencyList[dest] = newNode;
-
         }
 
 
@@ -107,10 +106,6 @@ namespace graph {
                  cout << "NULL" << endl;
              }
         }
-
-
-
-
 
         int Graph::getNumberOfVertices() {
              return this->numVertices;

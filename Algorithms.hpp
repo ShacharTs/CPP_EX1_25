@@ -9,9 +9,9 @@ namespace graph {
     public:
         static int* bfs(Graph& g, int source);
         Graph static dfs(Graph& g, int source);
-        void static dijkstra (Graph& g, int source);
+        Graph static dijkstra (Graph& g, int source);
         Graph static prim (Graph& g);
-        Graph static kruskal(Graph& g, int source);
+        Graph static kruskal(Graph& g);
     };
 
 }
