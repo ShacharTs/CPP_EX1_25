@@ -22,9 +22,13 @@ namespace graph {
         explicit Graph(int vertices);
         ~Graph();
         void addEdge(int src, int dest, int weight = 1);
+
+        void addEdgeForBFSTree(int src, int dest, int weight);
+
         void removeEdge(int src, int dest);
         void print_graph();
         int getNumberOfVertices();
+
     };
 
 }

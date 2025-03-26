@@ -3,12 +3,12 @@
 using namespace std;
 
 class PQueue {
-private:
+public:
     struct PQElement {
-        int value;
-        int priority;
+        int dest;
+        int weight;
 
-        PQElement(const int value, const int priority) : value(value), priority(priority) {}
+        PQElement(int dest, int weight) : dest(dest), weight(weight) {}
     };
 
     PQElement** array;
@@ -16,32 +16,32 @@ private:
     int capacity;
 
 public:
-    explicit PQueue(const int capacity) {
+    explicit PQueue(int capacity) {
         this->capacity = capacity;
         this->size = 0;
         array = new PQElement*[capacity];
     }
 
-    bool isEmpty() {
+    bool isEmpty() const {
         return size == 0;
     }
 
-    bool isFull() {
+    bool isFull() const {
         return size == capacity;
     }
 
-    // Enqueue with priority
-    void enqueue(int value, int priority) {
+    // Enqueue with priority (based on edge weight)
+    void enqueue(const int dest, const int weight) {
         if (isFull()) {
             return;
         }
 
-        PQElement* newElement = new PQElement(value, priority);
+        PQElement* newElement = new PQElement(dest, weight);
 
-        // Insert the new element in sorted order by priority
+        // Insert the new element in sorted order by priority (weight)
         int i = size - 1;
-        while (i >= 0 && array[i]->priority < priority) {
-            array[i + 1] = array[i];  // shift the element right
+        while (i >= 0 && array[i]->weight > weight) {  // In priority queue, smallest weight should come first
+            array[i + 1] = array[i];  // Shift the element right
             i--;
         }
 
@@ -50,32 +50,38 @@ public:
         size++;
     }
 
-    // Dequeue the highest priority element
-    int dequeue() {
+    // Dequeue the highest priority element (the one with the smallest weight)
+    PQElement* dequeue() {
         if (isEmpty()) {
-            return -1;
+            return nullptr;
         }
 
-        const int value = array[0]->value;
-        delete array[0];  // Free memory
-
-        // Shift all to the  left
+        PQElement* element = array[0];  // Get the element with the minimum weight
+        // Shift all elements to the left
         for (int i = 1; i < size; i++) {
             array[i - 1] = array[i];
         }
 
-        size--; // reducing size by 1
-        return value;
+        size--;  // Reducing size by 1
+        return element;
     }
 
-    int peek() {
+    PQElement* peek() const {
         if (isEmpty()) {
-            return -1;
+            return nullptr;
         }
 
-        return array[0]->value;
+        return array[0];  // Return the element with the minimum weight
     }
 
+
+    int getDest(const PQElement* element) const {
+        return element->dest;
+    }
+
+    int getWeight(const PQElement* element) const {
+        return element->weight;
+    }
 
     ~PQueue() {
         for (int i = 0; i < size; ++i) {

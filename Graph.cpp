@@ -14,6 +14,7 @@ namespace graph {
                 this->adjacencyList[i] = nullptr;
             }
         }
+
         Graph::~Graph() {
             cout << "Graph Destructor cleaning" << endl;
             for (int i = 0; i < this->numVertices; i++) {
@@ -43,6 +44,9 @@ namespace graph {
              adjacencyList[dest] = newNode;
 
         }
+
+
+
 
         /**
          * Undirected graph needs to remove both side to fully remove both edges
@@ -89,22 +93,30 @@ namespace graph {
          */
         void Graph::print_graph() {
              for (int i = 0; i < this->numVertices; i++) {
-                 cout << "Vertice: "<< i << " -> ";
-                 // Traverse the linked list
+                 cout << "Vertex " << i << " -> ";
+
+                 // Traverse the linked list for adjacency list of vertex i
                  Node* current = adjacencyList[i];
+
+                 // Traverse the adjacency list and print destination and weight
                  while (current != nullptr) {
-                     cout << current->dest << " -> ";  // Print current dest
-                     current = current->next; // Move to the next node
+                     cout << "(" << current->dest << ", weight: " << current->weight << ") -> ";
+                     current = current->next;  // Move to the next node
                  }
+
                  cout << "NULL" << endl;
              }
-         }
+        }
+
+
+
+
 
         int Graph::getNumberOfVertices() {
              return this->numVertices;
         }
 
-        int getWeigth(const Node* current) {
+        int getWeight(const Node* current) {
              return current->weight;
         }
 };
