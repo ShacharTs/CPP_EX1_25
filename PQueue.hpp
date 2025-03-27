@@ -1,4 +1,6 @@
-#include <iostream>
+#ifndef PQUEUE_HPP
+#define PQUEUE_HPP
+
 
 using namespace std;
 
@@ -121,3 +123,5 @@ public:
         delete[] array;  // Delete the array
     }
 };
+
+#endif //PQUEUE_HPP

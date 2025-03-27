@@ -1,9 +1,9 @@
 #include "Algorithms.hpp"
-#include "Graph.hpp"
-#include "PQueue.cpp"
+#include "PQueue.hpp"
 #include "math.h"
-#include "UnionFind.cpp"
+#include "UnionFind.hpp"
 #include <iostream>
+
 
 using namespace  std;
 
@@ -207,7 +207,7 @@ namespace graph {
         delete[] dist;
         delete[] visited;
         delete[] prev;
-        cout << "DEBUG HERE" << endl;
+        //cout << "Debug line for testing<< endl;
         return dijkstraGraph;
     }
 

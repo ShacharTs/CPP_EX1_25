@@ -1,4 +1,7 @@
-#include <iostream>
+
+#ifndef UNIONFIND_HPP
+#define UNIONFIND_HPP
+
 using namespace std;
 
 class UnionFind {
@@ -49,3 +52,5 @@ public:
         return find(x) == find(y);
     }
 };
+
+#endif //UNIONFIND_HPP

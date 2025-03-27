@@ -10,10 +10,9 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 # Add the source files
 add_executable(CPP_EX1_25 Graph.cpp
         Algorithms.cpp
-        Queue.cpp
         Test.cpp
-        PQueue.cpp
-        UnionFind.cpp
-        Node.cpp
+        Node.hpp
+        PQueue.hpp
+        UnionFind.hpp
 
 )

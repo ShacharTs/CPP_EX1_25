@@ -1,14 +1,16 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "Algorithms.hpp"
-#include "Graph.hpp"
 #include <iostream>
-
 
 using namespace std;
 
+
+
+
+
 TEST_CASE("Test BFS on Graph") {
-    graph::Graph g(12);
+    graph::Graph g(13);
 
     g.addEdge(10, 1, 0);
     g.addEdge(1, 9, 0);
@@ -52,15 +54,11 @@ TEST_CASE("Test DFS on Graph") {
 
 TEST_CASE("Test Dijkstra on Graph") {
     graph::Graph g(6);
-
-    // Extra branch from 0 that does not lead to 5:
-    g.addEdge(0, 1, 10);  // branch: 0 -> 1 (dead end or separate subtree)
-    g.addEdge(1, 3, 15);  // branch: 1 -> 3
-
-    // Main branch that leads to 5:
-    g.addEdge(0, 2, 5);   // main branch from 0 to 2
-    g.addEdge(2, 4, 3);   // main branch from 2 to 4
-    g.addEdge(4, 5, 2);   // main branch from 4 to 5
+    g.addEdge(0, 1, 10);
+    g.addEdge(1, 3, 15);
+    g.addEdge(0, 2, 5);
+    g.addEdge(2, 4, 3);
+    g.addEdge(4, 5, 2);
 
     graph::Algorithms::dijkstra(g, 0);
 
@@ -88,7 +86,7 @@ TEST_CASE("Test Prim on Graph") {
     g.addEdge(6,7,12);
 
 
-    graph::Graph h  = graph::Algorithms::prim(g);  // Get the MST
+    graph::Graph h  = graph::Algorithms::prim(g);
 
 }
 
@@ -112,7 +110,7 @@ TEST_CASE("Test Kruskal on Graph") {
     g.addEdge(6,7,12);
 
 
-    graph::Graph h  = graph::Algorithms::kruskal(g);  // Get the MST
+    graph::Graph h  = graph::Algorithms::kruskal(g);
 
 }
 
@@ -129,7 +127,7 @@ TEST_CASE("Test graph edge removal") {
     g.addEdge(2, 3, 1);
     g.addEdge(3, 4, 1);
 
-    // Remove an edge and check the result
+
     g.removeEdge(1, 4);
     cout << "Graph after removing edge (1, 4):" << endl;
     g.print_graph();
