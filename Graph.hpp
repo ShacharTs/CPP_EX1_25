@@ -5,18 +5,19 @@ namespace graph {
 
 
     struct Node {
+        int source;
         int dest;
         int weight;
         Node* next;
-        Node(const int dest, const int weight, Node* next = nullptr) : dest(dest), weight(weight), next(next) {}
+        Node(const int source,const int dest, const int weight, Node* next = nullptr) : source(source), dest(dest), weight(weight), next(next) {}
     };
 
     class Graph {
         int numVertices;
         void removeEdgeHelper(int src, int dest, Node* prev, Node* current);
 
-    private:
         void dfsRec(Graph &g,bool visited[], int source);
+
     public:
         Node** adjacencyList;
         explicit Graph(int vertices);

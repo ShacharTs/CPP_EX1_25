@@ -2,6 +2,7 @@
 #include "Graph.hpp"
 #include "PQueue.cpp"
 #include "math.h"
+#include "UnionFind.cpp"
 #include <iostream>
 
 using namespace  std;
@@ -25,7 +26,7 @@ namespace graph {
         if (node == -1) {
             return;
         }
-        printPath(prev, prev[node]); // Recursively print predecessor path
+        printPath(prev, prev[node]); // Recursively print a predecessor path
         cout << node << " ";
     }
 
@@ -278,17 +279,64 @@ namespace graph {
 
 
 
-
     /**
      * 
      * @param g Graph
      */
     Graph Algorithms::kruskal(Graph &g) {
+        int size = g.getNumberOfVertices();
+        Graph kruskalGraph(size);
+        PQueue pq(size);
+        int* key = new int[size];
+        int* dist = new int[size];
+        int* parent = new int[size];
+        bool* visited = new bool[size];
+        UnionFind union_find(size);
+        resetVisit(visited, size);
+        initDistance(key, size);
+
+        for (int i = 0; i < size; i++) {
+            key[i] = -1;
+        }
+
+        // adding all the edges to PQ to sort it from lowest weight to highest weight
+        for (int i = 0; i < size; i++) {
+            Node* temp = g.adjacencyList[i];
+            while (temp != nullptr) {
+                pq.enqueue(temp->source,temp->dest, temp->weight);
+                temp = temp->next;
+            }
+        }
 
 
+        // running kruskal algorithm
+        while (!pq.isEmpty()) {
+            auto* current = pq.dequeue();
+            // Now the edge carries both endpoints
+            const int source = current->source;  // Now available in Node
+            const int dest = current->dest;
+            const int weight = current->weight;
 
+            // Find the sets for both endpoints
+            int x = union_find.find(source);
+            int y = union_find.find(dest);
 
-        return g;
+            // If they are in different sets, add the edge to the MST
+            if (x != y) {
+                kruskalGraph.addEdge(source, dest, weight);
+                union_find.unionSets(x, y);
+            }
+            delete current;
+        }
+
+        dfs(kruskalGraph,0);
+
+        delete[] parent;
+        delete[] dist;
+        delete[] visited;
+        delete[] key;
+
+        return kruskalGraph;
     }
 }
 

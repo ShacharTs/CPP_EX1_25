@@ -37,10 +37,10 @@ namespace graph {
          */
         void Graph::addEdge(const int src, const int dest, int weight) {
              // creating new node for src to dest
-             Node* newNode = new Node(dest,weight,adjacencyList[src]);
+             Node* newNode = new Node(src,dest,weight,adjacencyList[src]);
              adjacencyList[src] = newNode;
              // creating new node for dest to src
-             newNode = new Node(src,weight,adjacencyList[dest]);
+             newNode = new Node(dest,src,weight,adjacencyList[dest]);
              adjacencyList[dest] = newNode;
         }
 

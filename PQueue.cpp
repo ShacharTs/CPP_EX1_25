@@ -5,10 +5,11 @@ using namespace std;
 class PQueue {
 public:
     struct PQElement {
+        int source;
         int dest;
         int weight;
 
-        PQElement(int dest, int weight) : dest(dest), weight(weight) {}
+        PQElement(int source,int dest, int weight) : source(source), dest(dest), weight(weight) {}
     };
 
     PQElement** array;
@@ -31,12 +32,12 @@ public:
     }
 
     // Enqueue with priority (based on edge weight)
-    void enqueue(const int dest, const int weight) {
+    void enqueue(const int source,const int dest, const int weight) {
         if (isFull()) {
             return;
         }
 
-        PQElement* newElement = new PQElement(dest, weight);
+        PQElement* newElement = new PQElement(source,dest, weight);
 
         // Insert the new element in sorted order by priority (weight)
         int i = size - 1;
@@ -50,21 +51,51 @@ public:
         size++;
     }
 
+    void enqueue(int node, int priority) {
+        if (isFull()) {
+            return;
+        }
+
+        PQElement* newElement = new PQElement(-1, node, priority);
+
+        int i = size - 1;
+        while (i >= 0 && array[i]->weight > priority) {
+            array[i + 1] = array[i];
+            i--;
+        }
+        array[i + 1] = newElement;
+        size++;
+    }
+
+
     // Dequeue the highest priority element (the one with the smallest weight)
     PQElement* dequeue() {
         if (isEmpty()) {
             return nullptr;
         }
 
-        PQElement* element = array[0];  // Get the element with the minimum weight
-        // Shift all elements to the left
-        for (int i = 1; i < size; i++) {
-            array[i - 1] = array[i];
+        // Find the index of the element with the smallest weight
+        int minIndex = 0;
+        for (int i = 0; i < size; i++) {
+            if (array[i]->weight < array[minIndex]->weight) {
+                minIndex = i;
+            }
         }
 
-        size--;  // Reducing size by 1
+        // Get the element with the smallest weight
+        PQElement* element = array[minIndex];
+
+        // Shift all elements to the left to fill the gap
+        for (int i = minIndex; i < size - 1; i++) {
+            array[i] = array[i + 1];
+        }
+
+        // Decrease the size of the queue
+        size--;
+
         return element;
     }
+
 
     PQElement* peek() const {
         if (isEmpty()) {
