@@ -62,7 +62,7 @@ namespace graph {
 
         // Process the queue until empty.
         while (!pq.isEmpty()) {
-            PQueue::PQElement* front = pq.peek();
+            auto* front = pq.peek();
             int current = front->dest;
             pq.dequeue();
             cout << "Visited node: " << current << endl;
@@ -299,7 +299,7 @@ namespace graph {
             key[i] = -1;
         }
 
-        // adding all the edges to PQ to sort it from lowest weight to highest weight
+        // adding all the edges to PQ to sort it from the lowest weight to the highest weight
         for (int i = 0; i < size; i++) {
             Node* temp = g.adjacencyList[i];
             while (temp != nullptr) {
@@ -312,20 +312,21 @@ namespace graph {
         // running kruskal algorithm
         while (!pq.isEmpty()) {
             auto* current = pq.dequeue();
-            // Now the edge carries both endpoints
-            const int source = current->source;  // Now available in Node
+
+            const int source = current->source;
             const int dest = current->dest;
             const int weight = current->weight;
 
-            // Find the sets for both endpoints
-            int x = union_find.find(source);
-            int y = union_find.find(dest);
+            // finding both nodes, source and dest
+            const int x = union_find.find(source);
+            const int y = union_find.find(dest);
 
-            // If they are in different sets, add the edge to the MST
+            // if node x and node y are not in the same set, Union it
             if (x != y) {
                 kruskalGraph.addEdge(source, dest, weight);
                 union_find.unionSets(x, y);
             }
+            // this node no longer needed
             delete current;
         }
 

@@ -4,15 +4,15 @@ using namespace std;
 
 class PQueue {
 public:
-    struct PQElement {
+    struct Node {
         int source;
         int dest;
         int weight;
 
-        PQElement(int source,int dest, int weight) : source(source), dest(dest), weight(weight) {}
+        Node(int source,int dest, int weight) : source(source), dest(dest), weight(weight) {}
     };
 
-    PQElement** array;
+    Node** array;
     int size;
     int capacity;
 
@@ -20,7 +20,7 @@ public:
     explicit PQueue(int capacity) {
         this->capacity = capacity;
         this->size = 0;
-        array = new PQElement*[capacity];
+        array = new Node*[capacity];
     }
 
     bool isEmpty() const {
@@ -37,7 +37,7 @@ public:
             return;
         }
 
-        PQElement* newElement = new PQElement(source,dest, weight);
+        Node* newElement = new Node(source,dest, weight);
 
         // Insert the new element in sorted order by priority (weight)
         int i = size - 1;
@@ -56,7 +56,7 @@ public:
             return;
         }
 
-        PQElement* newElement = new PQElement(-1, node, priority);
+        Node* newElement = new Node(-1, node, priority);
 
         int i = size - 1;
         while (i >= 0 && array[i]->weight > priority) {
@@ -69,7 +69,7 @@ public:
 
 
     // Dequeue the highest priority element (the one with the smallest weight)
-    PQElement* dequeue() {
+    Node* dequeue() {
         if (isEmpty()) {
             return nullptr;
         }
@@ -83,7 +83,7 @@ public:
         }
 
         // Get the element with the smallest weight
-        PQElement* element = array[minIndex];
+        Node* element = array[minIndex];
 
         // Shift all elements to the left to fill the gap
         for (int i = minIndex; i < size - 1; i++) {
@@ -97,7 +97,7 @@ public:
     }
 
 
-    PQElement* peek() const {
+    Node* peek() const {
         if (isEmpty()) {
             return nullptr;
         }
@@ -106,11 +106,11 @@ public:
     }
 
 
-    int getDest(const PQElement* element) const {
+    int getDest(const Node* element) const {
         return element->dest;
     }
 
-    int getWeight(const PQElement* element) const {
+    int getWeight(const Node* element) const {
         return element->weight;
     }
 

@@ -53,16 +53,14 @@ TEST_CASE("Test DFS on Graph") {
 TEST_CASE("Test Dijkstra on Graph") {
     graph::Graph g(6);
 
-    // Add edges
-    g.addEdge(0,1,2);
-    g.addEdge(0,2,8);
-    g.addEdge(1,3,6);
-    g.addEdge(1,2,5);
-    g.addEdge(2,3,3);
-    g.addEdge(2,4,2);
-    g.addEdge(3,4,1);
-    g.addEdge(3,5,9);
-    g.addEdge(4,5,3);
+    // Extra branch from 0 that does not lead to 5:
+    g.addEdge(0, 1, 10);  // branch: 0 -> 1 (dead end or separate subtree)
+    g.addEdge(1, 3, 15);  // branch: 1 -> 3
+
+    // Main branch that leads to 5:
+    g.addEdge(0, 2, 5);   // main branch from 0 to 2
+    g.addEdge(2, 4, 3);   // main branch from 2 to 4
+    g.addEdge(4, 5, 2);   // main branch from 4 to 5
 
     graph::Algorithms::dijkstra(g, 0);
 
