@@ -153,10 +153,11 @@ namespace graph {
      * @param g Graph
      * @param source Node
      */
-    Graph Algorithms::dijkstra(Graph &g, const int source) {
-        const int size = g.getNumberOfVertices();
+    Graph Algorithms::dijkstra(Graph &g,  int source) {
+        int size = g.getNumberOfVertices();
         int* dist = new int[size]; // array of the shortest path
         int* prev = new int[size]; // array to store the previous node for each node
+        Graph dijkstraGraph(size);
 
         initDistance(dist, size);
         for (int i = 0; i < size; i++) {
@@ -187,9 +188,11 @@ namespace graph {
                     dist[neighbor] = dist[temp] + weight; // add the new weight to the dist
                     prev[neighbor] = temp; // update the previous node for this neighbor
                     pq.enqueue(neighbor, dist[neighbor]);
+                    dijkstraGraph.addEdge(source, neighbor, weight);
                 }
                 current = current->next; // go to the next node
             }
+            delete current;
         }
 
         // Output the shortest distances and paths from the source node
@@ -204,8 +207,8 @@ namespace graph {
         delete[] dist;
         delete[] visited;
         delete[] prev;
-
-        return g;
+        cout << "DEBUG HERE" << endl;
+        return dijkstraGraph;
     }
 
     /**
