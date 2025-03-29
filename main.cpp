@@ -1,7 +1,7 @@
 #include <iostream>
-#include "mainHeader.hpp"
+
 #include "Algorithms.hpp"
-#include <cstdlib>
+
 
 using namespace std;
 
@@ -11,74 +11,12 @@ using namespace std;
 /**
  * Notes: this code was written in C++ version 17
  * g++ version: g++ (Rev3, Built by MSYS2 project) 14.2.0
- * from testing this code might NOT WORK on a lower version of c++ or g++
+ * from testing this code will NOT WORK on a lower version of c++ or g++
  */
 
+
 int main() {
-    bool vaild = false;
-    while (!vaild) {
-        int userInput;
-        cout << "Hello please choose which method do you want to use\n"
-        << "For pre made graph please type 1 ,for Manual input please press 2 :";
-        cin >> userInput;
-
-        switch (userInput) {
-            case 1:
-                preMade();
-                vaild = true;
-                break;
-            case 2:
-                userManual();
-                vaild = true;
-                break;
-            default:
-                cout << "Wrong input, please try again.\n";
-                break;
-        }
-    }
-
-
-
-    return 0;
-}
-
-void userManual() {
-    int size;
-    while (true) {
-        cout << "Please choose the size of the graph do want to create: ";
-        cin >> size;
-        if (size > 1) {
-            break;
-        }
-    }
-
-    cout << "User graph size is: " << size;
-    graph::Graph graph(size);
-}
-
-void preMade() {
-    cout << "There is a png file that show the pre made graph" << endl;
-
-
-    while (true) {
-        char userInput;
-        cout << "Do you want to see a visual of the pre made graph ?: y/n" << endl;
-        cin >> userInput;
-        if (userInput == 'y' || userInput == 'Y') {
-            #ifdef _WIN32
-                        system("start pre_made_graph.png");
-            #elif __APPLE__
-                        system("open pre_made_graph.png");
-            #else
-                        system("xdg-open pre_made_graph.png");
-            #endif
-            break;
-        } else if (userInput == 'n' || userInput == 'N') {
-            break;
-        } else {
-            cout << "Invalid input. Please enter y or n." << endl;
-        }
-    }
+    cout << "In the folder there is a png of the graph" << endl;
 
     graph::Graph preMadeGraph(8);
 
@@ -121,7 +59,5 @@ void preMade() {
             cout << "Wrong input, please try again." << endl;
     }
 
-
-
-
+    return 0;
 }

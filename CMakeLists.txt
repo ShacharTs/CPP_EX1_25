@@ -13,7 +13,6 @@ add_executable(CPP_EX1_25
         Graph.cpp
         Algorithms.cpp
         main.cpp
-        main.cpp
         Test.cpp
 )
 

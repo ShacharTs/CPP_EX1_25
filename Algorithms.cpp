@@ -92,7 +92,6 @@ namespace graph {
     void dfsRec(Graph &g, Graph &dfsTree, bool visited[], int source) {
         visited[source] = true;
         cout << "Visited node: " << source << endl;
-
         Node* current = g.adjacencyList[source];
         while (current != nullptr) {
             int neighbor = current->dest;
@@ -263,14 +262,8 @@ namespace graph {
         for (int v = 1; v < size; v++) {
             int u = parent[v];
             MstGraph.addEdge(u, v, key[v]);
-            cout<< "Adding Edge: (" <<u << "," << v <<")" <<endl;
+            cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << key[v] << endl;
         }
-
-        const int target = size - 1;
-        cout << "Path from " << 0 << " to " << target << ": ";
-        dfs(MstGraph,0);
-        cout << endl;
-
         // free memory
         delete[] visited;
         delete[] key;
@@ -287,60 +280,49 @@ namespace graph {
      */
     Graph Algorithms::kruskal(Graph &g) {
         int size = g.getNumberOfVertices();
-        Graph kruskalGraph(size);
-        PQueue pq(size);
-        int* key = new int[size];
-        int* dist = new int[size];
-        int* parent = new int[size];
-        bool* visited = new bool[size];
-        UnionFind union_find(size);
-        resetVisit(visited, size);
-        initDistance(key, size);
+        Graph mst(size);
+        PQueue pq(size * size);
+        UnionFind uf(size);
+        int totalWeight = 0;
 
-        for (int i = 0; i < size; i++) {
-            key[i] = -1;
-        }
-
-        // adding all the edges to PQ to sort it from the lowest weight to the highest weight
         for (int i = 0; i < size; i++) {
             Node* temp = g.adjacencyList[i];
             while (temp != nullptr) {
-                pq.enqueue(temp->source,temp->dest, temp->weight);
+                if (temp->source < temp->dest) {
+                    pq.enqueue(temp->source, temp->dest, temp->weight);
+                }
                 temp = temp->next;
             }
         }
 
-
-        // running kruskal algorithm
         while (!pq.isEmpty()) {
-            auto* current = pq.dequeue();
+            Node* edge = pq.dequeue();
+            int u = edge->source;
+            int v = edge->dest;
+            int w = edge->weight;
 
-            const int source = current->source;
-            const int dest = current->dest;
-            const int weight = current->weight;
+            int setU = uf.find(u);
+            int setV = uf.find(v);
 
-            // finding both nodes, source and dest
-            const int x = union_find.find(source);
-            const int y = union_find.find(dest);
-
-            // if node x and node y are not in the same set, Union it
-            if (x != y) {
-                kruskalGraph.addEdge(source, dest, weight);
-                union_find.unionSets(x, y);
+            if (setU != setV) {
+                mst.addEdge(u, v, w);
+                totalWeight += w;  //  Track total weight
+                cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << w << endl;
+                uf.unionSets(setU, setV);
             }
-            // this node no longer needed
-            delete current;
+
+            delete edge;
         }
 
-        dfs(kruskalGraph,0);
+        // Print final total weight
+        cout << "Total weight of MST: " << totalWeight << endl;
 
-        delete[] parent;
-        delete[] dist;
-        delete[] visited;
-        delete[] key;
-
-        return kruskalGraph;
+        return mst;
     }
+
+
+
+
 }
 
 
