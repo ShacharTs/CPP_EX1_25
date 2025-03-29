@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -g -std=c++17
+CXXFLAGS = -Wall -Werror -g -std=c++17
 
 OUTPUTMAIN = main
 OUTPUTTEST = test

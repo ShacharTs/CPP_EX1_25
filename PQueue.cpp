@@ -1,6 +1,6 @@
 #include "PQueue.hpp"
 
-PQueue::PQueue(int capacity) : capacity(capacity), size(0) {
+PQueue::PQueue(int capacity) :  size(0), capacity(capacity) {
     array = new Node*[capacity];
 }
 
