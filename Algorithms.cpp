@@ -287,51 +287,48 @@ namespace graph {
 
 
     /**
-     * Returns the MST of the graph using Kruskal's algorithm.
-     *
-     * @param g The input graph.
-     * @return The MST as a new graph.
-     */
+ * Returns the MST of the graph using Kruskal's algorithm.
+ *
+ * @param g The input graph.
+ * @return The MST as a new graph.
+ */
     Graph Algorithms::kruskal(Graph &g) {
         const int size = g.getNumberOfVertices();
         Graph mst(size);
         PQueue pq(size * size);
         UnionFind uf(size);
         int totalWeight = 0;
-        // checking dest
+
+        // Enqueue all edges once (undirected: source < dest)
         for (int i = 0; i < size; i++) {
             Node* temp = g.adjacencyList[i];
             while (temp != nullptr) {
-                if (temp->source < temp->dest) {
+                if (temp->source < temp->dest)
                     pq.enqueue(temp->source, temp->dest, temp->weight);
-                }
                 temp = temp->next;
             }
         }
 
-        // explore neighbors
+        // Process edges in increasing order of weight
         while (!pq.isEmpty()) {
             Node* edge = pq.dequeue();
             int u = edge->source;
             int v = edge->dest;
             int w = edge->weight;
 
-            int setU = uf.find(u);
-            int setV = uf.find(v);
-            // building mst graph
-            if (setU != setV) {
+            // If edge doesn't form a cycle, add it to MST
+            if (uf.find(u) != uf.find(v)) {
                 mst.addEdge(u, v, w);
-                totalWeight += w; // add weight
-                cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << w << endl;
-                uf.unionSets(setU, setV);
+                totalWeight += w;
+                cout << "Adding Edge to MST: (" << u << ", " << v << ") with weight = " << w << endl;
+                uf.unionSets(uf.find(u), uf.find(v));
             }
-
             delete edge;
         }
 
         cout << "Total weight of MST: " << totalWeight << endl;
-
         return mst;
     }
+
 
 }
