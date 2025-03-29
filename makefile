@@ -1,36 +1,44 @@
-# Compiler
-CXX = C:/msys64/mingw64/bin/g++
-
-
-# Compiler flags: enable all warnings, debug info, and use C++17
+CXX = g++
 CXXFLAGS = -Wall -g -std=c++17
 
-# Name of the target executable
-TARGET = main
+OUTPUTMAIN = main
+OUTPUTTEST = test
 
-# Source files (adjust paths if they are in subdirectories)
-SRCS = Graph.cpp Algorithms.cpp Test.cpp
+SRCS = UnionFind.cpp PQueue.cpp Graph.cpp Algorithms.cpp
 
-# Object files (automatically derived from SRCS)
+MAIN = main.cpp
+TEST = Test.cpp
+
 OBJS = $(SRCS:.cpp=.o)
 
-# Default rule: build the target executable and run it
-all: $(TARGET) run
+MAINS = $(OBJS) $(MAIN:.cpp=.o)
 
-# Rule to link object files into the target executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+TESTS = $(OBJS) $(TEST:.cpp=.o)
 
-# Pattern rule to compile .cpp files into .o files.
-# (Make sure to use a TAB at the beginning of the command line)
+
+.PHONY: main test valgrind clean
+
+main: $(MAINS)
+	$(CXX) $(CXXFLAGS) -o $(OUTPUTMAIN) $(MAINS)
+
+test: $(TESTS)
+	$(CXX) $(CXXFLAGS) -o $(OUTPUTTEST) $(TESTS)
+
+valgrind:
+	@echo "Valgrind not test yet"
+
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Rule to run the executable
-run: $(TARGET)
-	./$(TARGET)
 
-# Clean rule to remove generated files
 clean:
-	del /F $(TARGET_DEL) $(OBJS)
+ifeq ($(OS),Windows_NT)
+	del /F $(OUTPUTMAIN).exe $(OUTPUTTEST).exe $(OBJS) $(MAINS) $(TESTS)
+else
+	rm -f $(OUTPUTMAIN) $(OUTPUTTEST) $(OBJS) $(MAINS) $(TESTS)
+endif
+
+
+
 

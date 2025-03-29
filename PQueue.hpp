@@ -1,127 +1,35 @@
 #ifndef PQUEUE_HPP
 #define PQUEUE_HPP
 
-
-using namespace std;
+#include "Node.hpp"
 
 class PQueue {
-public:
-    struct Node {
-        int source;
-        int dest;
-        int weight;
-
-        Node(int source,int dest, int weight) : source(source), dest(dest), weight(weight) {}
-    };
-
+private:
     Node** array;
     int size;
     int capacity;
 
 public:
-    explicit PQueue(int capacity) {
-        this->capacity = capacity;
-        this->size = 0;
-        array = new Node*[capacity];
-    }
-
-    bool isEmpty() const {
-        return size == 0;
-    }
-
-    bool isFull() const {
-        return size == capacity;
-    }
-
-    // Enqueue with priority (based on edge weight)
-    void enqueue(const int source,const int dest, const int weight) {
-        if (isFull()) {
-            return;
-        }
-
-        Node* newElement = new Node(source,dest, weight);
-
-        // Insert the new element in sorted order by priority (weight)
-        int i = size - 1;
-        while (i >= 0 && array[i]->weight > weight) {  // In priority queue, smallest weight should come first
-            array[i + 1] = array[i];  // Shift the element right
-            i--;
-        }
-
-        // Insert the new element at the correct position
-        array[i + 1] = newElement;
-        size++;
-    }
-
-    void enqueue(int node, int priority) {
-        if (isFull()) {
-            return;
-        }
-
-        Node* newElement = new Node(-1, node, priority);
-
-        int i = size - 1;
-        while (i >= 0 && array[i]->weight > priority) {
-            array[i + 1] = array[i];
-            i--;
-        }
-        array[i + 1] = newElement;
-        size++;
-    }
+    // Constructor
+    explicit PQueue(int capacity);
 
 
-    // Dequeue the highest priority element (the one with the smallest weight)
-    Node* dequeue() {
-        if (isEmpty()) {
-            return nullptr;
-        }
+    bool isEmpty() const;
+    bool isFull() const;
 
-        // Find the index of the element with the smallest weight
-        int minIndex = 0;
-        for (int i = 0; i < size; i++) {
-            if (array[i]->weight < array[minIndex]->weight) {
-                minIndex = i;
-            }
-        }
-
-        // Get the element with the smallest weight
-        Node* element = array[minIndex];
-
-        // Shift all elements to the left to fill the gap
-        for (int i = minIndex; i < size - 1; i++) {
-            array[i] = array[i + 1];
-        }
-
-        // Decrease the size of the queue
-        size--;
-
-        return element;
-    }
+    // overloading because I am lazy to redo it
+    void enqueue(const int source, const int dest, const int weight);
+    void enqueue(int node, int priority);
 
 
-    Node* peek() const {
-        if (isEmpty()) {
-            return nullptr;
-        }
+    Node* dequeue();
+    Node* peek() const;
 
-        return array[0];  // Return the element with the minimum weight
-    }
+    // Helper functions, if needed
+    int getDest(const Node* element) const;
+    int getWeight(const Node* element) const;
 
-
-    int getDest(const Node* element) const {
-        return element->dest;
-    }
-
-    int getWeight(const Node* element) const {
-        return element->weight;
-    }
-
-    ~PQueue() {
-        for (int i = 0; i < size; ++i) {
-            delete array[i];
-        }
-        delete[] array;  // Delete the array
-    }
+    ~PQueue();
 };
 
-#endif //PQUEUE_HPP
+#endif // PQUEUE_HPP

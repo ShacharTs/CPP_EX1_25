@@ -5,7 +5,7 @@
 using namespace std;
 
 namespace graph {
-         Graph::Graph(const int vertices) {
+         Graph::Graph(int vertices) {
             this->numVertices = vertices;
             this->adjacencyList = new Node*[this->numVertices];
 
@@ -30,7 +30,7 @@ namespace graph {
         }
 
         /**
-         * Connect 2 nodes together from both side
+         * Connect 2 nodes from both sides
          * @param src source node
          * @param dest destination node
          * @param weight node weight
@@ -48,7 +48,7 @@ namespace graph {
 
 
         /**
-         * Undirected graph needs to remove both side to fully remove both edges
+         * Undirected graph needs to remove both sides to fully remove both edges
          * @param src the source node
          * @param dest the destination node
          */
@@ -73,7 +73,7 @@ namespace graph {
              if (current == nullptr) {
                  return;
              }
-             // if current node matches the destination, remove it
+             // if the current node matches the destination, remove it
              if (current->dest == dest) {
                  if (prev == nullptr) {
                      adjacencyList[src] = current->next;
@@ -88,13 +88,13 @@ namespace graph {
          }
 
         /**
-         * This method will print each node it path in the graph in linear way
+         * This method will print each node it path in the graph in a linear way
          */
         void Graph::print_graph() {
              for (int i = 0; i < this->numVertices; i++) {
                  cout << "Vertex " << i << " -> ";
 
-                 // Traverse the linked list for adjacency list of vertex i
+                 // Traverse the linked list for an adjacency list of vertex i
                  Node* current = adjacencyList[i];
 
                  // Traverse the adjacency list and print destination and weight

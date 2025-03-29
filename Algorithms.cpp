@@ -1,6 +1,6 @@
 #include "Algorithms.hpp"
 #include "PQueue.hpp"
-#include "math.h"
+#include <climits>
 #include "UnionFind.hpp"
 #include <iostream>
 
@@ -17,7 +17,7 @@ namespace graph {
 
     void initDistance(int* dist,int graphSize) {
         for (int i = 0; i < graphSize; i++) {
-            dist[i] = INFINITY;
+            dist[i] = INT_MAX;
         }
     }
 
@@ -137,7 +137,7 @@ namespace graph {
      * @return
      */
     int minDist(const int* dist, const bool* visited, const int distSize) {
-        int min = INFINITY;
+        int min = INT_MAX;
         int idx = -1;
         for (int i = 0; i< distSize; i++) {
             if (!visited[i] && dist[i] <min) {
@@ -207,7 +207,6 @@ namespace graph {
         delete[] dist;
         delete[] visited;
         delete[] prev;
-        //cout << "Debug line for testing<< endl;
         return dijkstraGraph;
     }
 
