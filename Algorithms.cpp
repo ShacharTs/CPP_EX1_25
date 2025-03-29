@@ -8,30 +8,40 @@
 using namespace  std;
 
 namespace graph {
-
-    void resetVisit(bool* visited,int graphSize) {
+    // helper method to reset visited
+    void resetVisit(bool* visited,const int graphSize) {
         for (int i = 0; i < graphSize; i++) {
             visited[i] = false;
         }
     }
 
-    void initDistance(int* dist,int graphSize) {
+    // helper method to reset dist
+    void initDistance(int* dist,const int graphSize) {
         for (int i = 0; i < graphSize; i++) {
             dist[i] = INT_MAX;
         }
     }
 
-    // Helper function to print the path from source to node
-    void printPath(int* prev, int node) {
+    // helper function to print the path from source to node
+    void printPath(int* prev, const int node) {
         if (node == -1) {
             return;
         }
         printPath(prev, prev[node]); // Recursively print a predecessor path
         cout << node << " ";
     }
-
-
-
+    // helper method to call dist
+    int minDist(const int* dist, const bool* visited, const int distSize) {
+        int min = INT_MAX;
+        int idx = -1;
+        for (int i = 0; i< distSize; i++) {
+            if (!visited[i] && dist[i] <min) {
+                min = dist[i];
+                idx = i;
+            }
+        }
+        return idx;
+    }
 
 
     /**
@@ -39,7 +49,7 @@ namespace graph {
      * @param g Graph
      * @param source Node
      */
-    int* Algorithms::bfs(Graph &g, int source) {
+    int* Algorithms::bfs(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
         bool* visited = new bool[size];
         resetVisit(visited, size);
@@ -69,7 +79,7 @@ namespace graph {
             // Explore all neighbors of the current vertex.
             Node* currentNode = g.adjacencyList[current];
             while (currentNode != nullptr) {
-                int neighbor = currentNode->dest;
+                const int neighbor = currentNode->dest;
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
                     // Set the parent of the neighbor to be the current vertex.
@@ -89,12 +99,12 @@ namespace graph {
 
 
     // Helper DFS function that builds a DFS tree by adding tree edges
-    void dfsRec(Graph &g, Graph &dfsTree, bool visited[], int source) {
+    void dfsRec(Graph &g, Graph &dfsTree, bool visited[], const int source) {
         visited[source] = true;
         cout << "Visited node: " << source << endl;
         Node* current = g.adjacencyList[source];
         while (current != nullptr) {
-            int neighbor = current->dest;
+            const int neighbor = current->dest;
             if (!visited[neighbor]) {
                 // tree edge
                 dfsTree.addEdge(source, neighbor, current->weight);
@@ -105,12 +115,12 @@ namespace graph {
     }
 
     /**
-     *  NEED TO RETURN INT*
-     * @param g
-     * @param source 
-     * @return 
+     * Dfs method to look for all the nodes
+     * @param g graph
+     * @param source start node
+     * @return graph
      */
-    Graph Algorithms::dfs(Graph &g, int source) {
+    Graph Algorithms::dfs(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
         bool* visited = new bool[size];
         resetVisit(visited, size);
@@ -128,31 +138,14 @@ namespace graph {
         return dfsTree;
     }
 
-    /**
-     *
-     * @param dist node
-     * @param visited node
-     * @param distSize
-     * @return
-     */
-    int minDist(const int* dist, const bool* visited, const int distSize) {
-        int min = INT_MAX;
-        int idx = -1;
-        for (int i = 0; i< distSize; i++) {
-            if (!visited[i] && dist[i] <min) {
-                min = dist[i];
-                idx = i;
-            }
-        }
-        return idx;
-    }
+
 
     /**
      * Dijkstra, check for the shortest path in graph when node got weight
      * @param g Graph
      * @param source Node
      */
-    Graph Algorithms::dijkstra(Graph &g,  int source) {
+    Graph Algorithms::dijkstra(Graph &g, const int source) {
         int size = g.getNumberOfVertices();
         int* dist = new int[size]; // array of the shortest path
         int* prev = new int[size]; // array to store the previous node for each node
@@ -195,12 +188,12 @@ namespace graph {
         }
 
         // Output the shortest distances and paths from the source node
-        cout << "Shortest distances from source node " << source << endl;
-        for (int i = 0; i < size; i++) {
-            cout << "Node: " << i << " dist: " << dist[i] << " Path: ";
-            printPath(prev, i);
-            cout << endl;
-        }
+        int dest = size - 1;
+        cout << "Shortest path from " << source << " to " << dest << ": ";
+        printPath(prev, dest);
+        cout << " (distance: " << dist[dest] << ")" << endl;
+
+
 
         // free memory
         delete[] dist;
@@ -210,10 +203,12 @@ namespace graph {
     }
 
     /**
+     * Returns the MST of the graph using Prim's algorithm.
      *
-     * @param g graph
-     * @return MstGraph
+     * @param g The input graph.
+     * @return The MST as a new graph.
      */
+
     Graph Algorithms::prim(Graph &g) {
         int size = g.getNumberOfVertices();
         bool* visited = new bool[size];
@@ -275,16 +270,18 @@ namespace graph {
 
 
     /**
-     * 
-     * @param g Graph
+     * Returns the MST of the graph using Kruskal's algorithm.
+     *
+     * @param g The input graph.
+     * @return The MST as a new graph.
      */
     Graph Algorithms::kruskal(Graph &g) {
-        int size = g.getNumberOfVertices();
+        const int size = g.getNumberOfVertices();
         Graph mst(size);
         PQueue pq(size * size);
         UnionFind uf(size);
         int totalWeight = 0;
-
+        // checking dest
         for (int i = 0; i < size; i++) {
             Node* temp = g.adjacencyList[i];
             while (temp != nullptr) {
@@ -295,6 +292,7 @@ namespace graph {
             }
         }
 
+        // explore neighbors
         while (!pq.isEmpty()) {
             Node* edge = pq.dequeue();
             int u = edge->source;
@@ -303,10 +301,10 @@ namespace graph {
 
             int setU = uf.find(u);
             int setV = uf.find(v);
-
+            // building mst graph
             if (setU != setV) {
                 mst.addEdge(u, v, w);
-                totalWeight += w;  //  Track total weight
+                totalWeight += w; // add weight
                 cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << w << endl;
                 uf.unionSets(setU, setV);
             }
@@ -314,14 +312,10 @@ namespace graph {
             delete edge;
         }
 
-        // Print final total weight
         cout << "Total weight of MST: " << totalWeight << endl;
 
         return mst;
     }
-
-
-
 
 }
 
