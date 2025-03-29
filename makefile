@@ -24,8 +24,8 @@ main: $(MAINS)
 test: $(TESTS)
 	$(CXX) $(CXXFLAGS) -o $(OUTPUTTEST) $(TESTS)
 
-valgrind:
-	@echo "Valgrind not test yet"
+valgrind: $(OUTPUTTEST)
+	valgrind --leak-check=full ./$(OUTPUTTEST)
 
 
 %.o: %.cpp

@@ -6,7 +6,7 @@
 namespace graph {
     class Algorithms {
     public:
-        static int* bfs(Graph& g, int source);
+        Graph static bfs(Graph& g, int source);
         Graph static dfs(Graph& g, int source);
         Graph static dijkstra (Graph& g, int source);
         Graph static prim (Graph& g);

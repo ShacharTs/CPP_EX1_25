@@ -27,7 +27,7 @@ void PQueue::enqueue(int source, int dest, int weight) {
 }
 
 
-void PQueue::enqueue(int node, int priority) {
+void PQueue::enqueue(const int node, const int priority) {
     if (isFull()) {
         return;
     }
@@ -40,6 +40,7 @@ void PQueue::enqueue(int node, int priority) {
     }
     array[i + 1] = newElement;
     size++;
+
 }
 
 Node* PQueue::dequeue() {

@@ -49,50 +49,67 @@ namespace graph {
      * @param g Graph
      * @param source Node
      */
-    int* Algorithms::bfs(Graph &g, const int source) {
+    Graph Algorithms::bfs(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
-        bool* visited = new bool[size];
-        resetVisit(visited, size);
 
-        // create an array to hold the parent for each vertex.
-        // set all parents to -1.
-        int* parent = new int[size];
-        for (int i = 0; i < size; ++i) {
-            parent[i] = -1;
+        // Create a BFS tree graph (initially empty).
+        Graph bfsTree(size);
+
+        // Track visited nodes.
+        bool* visited = new bool[size];
+        for (int i = 0; i < size; i++) {
+            visited[i] = false;
         }
 
+        // Use a priority queue for BFS order.
+        // (You might prefer a normal queue for BFS, but let's keep your PQueue.)
         PQueue pq(size);
         int order = 0;
 
-
+        // Start BFS from 'source'.
         visited[source] = true;
-        parent[source] = 0;
-        pq.enqueue(source, order++);
+        pq.enqueue(source, order++); // enqueue the source
+
         cout << "Starting BFS from node: " << source << endl;
 
         // Process the queue until empty.
         while (!pq.isEmpty()) {
-            auto* front = pq.peek();
+            // Dequeue the front node.
+            Node* front = pq.dequeue();
+            if (!front) break; // safety check
+
             int current = front->dest;
-            pq.dequeue();
             cout << "Visited node: " << current << endl;
-            // Explore all neighbors of the current vertex.
+
+            // Explore all neighbors of 'current'.
             Node* currentNode = g.adjacencyList[current];
             while (currentNode != nullptr) {
-                const int neighbor = currentNode->dest;
+                int neighbor = currentNode->dest;
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
-                    // Set the parent of the neighbor to be the current vertex.
-                    parent[neighbor] = current;
-                    pq.enqueue(neighbor, order++);  // Enqueue neighbor with increasing order value
+
+                    // Add edge (current -> neighbor) to the BFS tree.
+                    // Weight can be 'currentNode->weight' or just 1 if unweighted.
+                    bfsTree.addEdge(current, neighbor, currentNode->weight);
+
+                    // Enqueue the neighbor.
+                    pq.enqueue(neighbor, order++);
                 }
                 currentNode = currentNode->next;
             }
+
+            // Delete the node we dequeued to avoid a memory leak.
+            delete front;
         }
-        // free memory
+
+        // Clean up memory.
         delete[] visited;
-        return parent;
+
+        // Return the BFS tree graph.
+        return bfsTree;
     }
+
+
 
 
 
