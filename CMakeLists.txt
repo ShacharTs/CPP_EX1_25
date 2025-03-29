@@ -14,5 +14,6 @@ add_executable(CPP_EX1_25
         Algorithms.cpp
         main.cpp
         main.cpp
+        Test.cpp
 )
 
