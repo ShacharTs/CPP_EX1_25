@@ -1,7 +1,6 @@
 #ifndef PQUEUE_HPP
 #define PQUEUE_HPP
 
-#include "Node.hpp"
 
 template <typename T>
 class PQueue {
@@ -14,11 +13,10 @@ public:
     bool isEmpty() const;
     bool isFull() const;
     void enqueue(const int source, const int dest, const int weight);
-    void enqueue(int node, int priority);
     T* dequeue();
     T* peek() const;
-    int getDest(const T* element) const;
-    int getWeight(const T* element) const;
+    // int getDest(const T* element) const;
+    // int getWeight(const T* element) const;
     ~PQueue();
 };
 

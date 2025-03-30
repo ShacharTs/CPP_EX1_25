@@ -72,7 +72,10 @@ namespace graph {
         while (!pq.isEmpty()) {
             // Dequeue the front node.
             Node* front = pq.dequeue();
-            if (!front) break; // safety check
+            // safety check
+            if (!front) {
+                break;
+            }
 
             int current = front->dest;
             cout << "Visited node: " << current << endl;
@@ -89,14 +92,12 @@ namespace graph {
                     bfsTree.addEdge(current, neighbor, currentNode->weight);
 
                     // Enqueue the neighbor.
-                    // Use the current node as the parent.
                     pq.enqueue(current, neighbor, order++);
                 }
                 currentNode = currentNode->next;
             }
-
-            // Free the node returned by dequeue.
             delete front;
+            delete currentNode;
         }
 
         // Clean up memory.
@@ -161,52 +162,62 @@ namespace graph {
     int* prev = new int[size];    // Array to store the previous node for each vertex.
     Graph dijkstraGraph(size);
 
+    // Initialize distance array and previous pointer array.
     initDistance(dist, size);
     for (int i = 0; i < size; i++) {
-        prev[i] = -1; // Initialize prev array to -1, indicating no previous node.
+        prev[i] = -1;
     }
 
+    // Initialize visited array.
     bool* visited = new bool[size];
     resetVisit(visited, size);
 
-    PQueue<Node> pq(size); // Priority queue with given capacity.
-    dist[source] = 0;     // Starting point.
+    // Create a priority queue with capacity equal to the number of vertices.
+    PQueue<Node> pq(size);
+    dist[source] = 0;     // Starting point: distance to source is zero.
 
-    // Enqueue the starting vertex. If enqueue expects (source, dest, weight),
-    // pass -1 for the source since it has no predecessor.
+    // Enqueue the source vertex.
+    // If your enqueue expects (source, dest, weight), use -1 for source (no predecessor).
     pq.enqueue(-1, source, dist[source]);
 
-    for (int i = 0; i < size; i++) {
-        const int temp = minDist(dist, visited, size);
-        // No valid vertex left to process.
-        if (temp < 0) {
-            break;
+    // Main loop: Process nodes until the PQ is empty.
+    while (!pq.isEmpty()) {
+        // Extract the node with the smallest tentative distance.
+        Node* current = pq.dequeue();
+        int u = current->dest;
+        delete current;  // Free the dequeued node.
+
+        // Skip if this node has already been processed.
+        if (visited[u]) {
+            continue;
         }
-        visited[temp] = true;
-        Node* current = g.adjacencyList[temp];
+        visited[u] = true;
 
-        while (current != nullptr) {
-            const int neighbor = current->dest;   // Neighbor vertex.
-            const int weight = current->weight;     // Edge weight.
+        // Relax all edges from u.
+        Node* adj = g.adjacencyList[u];
+        while (adj != nullptr) {
+            int neighbor = adj->dest;
+            int weight = adj->weight;
 
+            // Check for negative weights.
             if (weight < 0) {
                 delete[] dist;
                 delete[] visited;
                 delete[] prev;
-                throw std::invalid_argument("Negative weight");
+                throw std::invalid_argument("Negative weight encountered in Dijkstra.");
             }
 
-            // Relaxation step: if the neighbor hasn't been visited and we find a shorter path.
-            if (!visited[neighbor] && dist[temp] + weight < dist[neighbor]) {
-                dist[neighbor] = dist[temp] + weight;  // Update distance.
-                prev[neighbor] = temp;                // Update previous node.
-                // Enqueue updated neighbor using three parameters.
-                pq.enqueue(temp, neighbor, dist[neighbor]);
-                dijkstraGraph.addEdge(temp, neighbor, weight);
+            // Relaxation step.
+            if (!visited[neighbor] && dist[u] + weight < dist[neighbor]) {
+                dist[neighbor] = dist[u] + weight;
+                prev[neighbor] = u;
+                // Enqueue the updated neighbor.
+                pq.enqueue(u, neighbor, dist[neighbor]);
+                // Optionally, record the edge in the resulting shortest path tree.
+                dijkstraGraph.addEdge(u, neighbor, weight);
             }
-            current = current->next;  // Move to the next adjacent node.
+            adj = adj->next;
         }
-        // DO NOT delete 'current' here because it points to nodes in the graph's adjacency list.
     }
 
     // Output the shortest path and distance from the source to the last vertex.
@@ -215,13 +226,14 @@ namespace graph {
     printPath(prev, dest);
     cout << " (distance: " << dist[dest] << ")" << endl;
 
-    // Free allocated memory.
+    // Clean up memory.
     delete[] dist;
     delete[] visited;
     delete[] prev;
 
     return dijkstraGraph;
 }
+
 
 
     /**
@@ -232,62 +244,80 @@ namespace graph {
      */
 
     Graph Algorithms::prim(Graph &g) {
-        int size = g.getNumberOfVertices();
-        bool* visited = new bool[size];
-        int* key = new int[size];
-        int* parent = new int[size];
+    int size = g.getNumberOfVertices();
 
-        resetVisit(visited, size);
-        initDistance(key, size);
-        for (int i = 0; i < size; i++) {
-            parent[i] = -1;
-        }
+    // Allocate and initialize arrays.
+    bool* visited = new bool[size];
+    int* key = new int[size];
+    int* parent = new int[size];
 
-        PQueue<Node> pq(size);
-        key[0] = 0;
-        pq.enqueue(-1,0, key[0]);
-
-        int totalMSTCost = 0;
-        while (!pq.isEmpty()) {
-            Node* current = pq.dequeue();
-            int u = current->dest;
-            delete current;
-
-            if (visited[u]) continue;
-            visited[u] = true;
-
-            if (parent[u] != -1) {
-                totalMSTCost += key[u];
-            }
-
-            // Explore neighbors
-            Node* adj = g.adjacencyList[u];
-            while (adj != nullptr) {
-                int v = adj->dest;
-                int w = adj->weight;
-                if (!visited[v] && w < key[v]) {
-                    key[v] = w;
-                    parent[v] = u;
-                    pq.enqueue(u,v, key[v]);
-                }
-                adj = adj->next;
-            }
-        }
-
-        cout << "Total MST cost: " << totalMSTCost << endl;
-        Graph MstGraph(size);
-        for (int v = 1; v < size; v++) {
-            int u = parent[v];
-            MstGraph.addEdge(u, v, key[v]);
-            cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << key[v] << endl;
-        }
-        // free memory
-        delete[] visited;
-        delete[] key;
-        delete[] parent;
-
-        return MstGraph;
+    resetVisit(visited, size);      // Set all visited[] values to false.
+    initDistance(key, size);        // Set all keys to INT_MAX.
+    for (int i = 0; i < size; i++) {
+        parent[i] = -1;             // Initialize parent array.
     }
+
+    // Create a priority queue with capacity equal to the number of vertices.
+    PQueue<Node> pq(size * size);
+
+
+    // Start with vertex 0: key is 0, and there is no parent (-1).
+    key[0] = 0;
+    pq.enqueue(-1, 0, key[0]);
+
+    int totalMSTCost = 0;
+
+    // Process nodes until the priority queue is empty.
+    while (!pq.isEmpty()) {
+        // Extract the node with the smallest key.
+        Node* current = pq.dequeue();
+        int u = current->dest;
+        delete current;  // Free the node after extraction.
+
+        // Skip if this vertex was already visited.
+        if (visited[u])
+            continue;
+        visited[u] = true;
+
+        // If u is not the starting vertex, add its key to the MST cost.
+        if (parent[u] != -1) {
+            totalMSTCost += key[u];
+        }
+
+        // Explore all neighbors of vertex u.
+        Node* adj = g.adjacencyList[u];
+        while (adj != nullptr) {
+            int v = adj->dest;
+            int w = adj->weight;
+            // If v is not yet in the MST and the edge (u,v) is lighter than current key[v],
+            // update key[v] and record u as its parent.
+            if (!visited[v] && w < key[v]) {
+                key[v] = w;
+                parent[v] = u;
+                pq.enqueue(u, v, key[v]);
+            }
+            adj = adj->next;
+        }
+    }
+
+    cout << "Total MST cost: " << totalMSTCost << endl;
+
+    // Build the MST graph from the parent array.
+    Graph mstGraph(size);
+    for (int v = 1; v < size; v++) {
+        int u = parent[v];
+        mstGraph.addEdge(u, v, key[v]);
+        cout << "Adding Edge to MST graph: (" << u << ", " << v << ") with weight = " << key[v] << endl;
+    }
+
+    // Clean up allocated memory.
+    delete[] visited;
+    delete[] key;
+    delete[] parent;
+
+    return mstGraph;
+}
+
 
 
 

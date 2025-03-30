@@ -1,7 +1,6 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 #include "Node.hpp"
-#include "UnionFind.hpp"
 
 
 namespace graph {

@@ -1,5 +1,7 @@
 #include "PQueue.hpp"
 
+#include <stdexcept>
+
 // using generic class for better uses
 template class PQueue<Node>;
 
@@ -21,7 +23,9 @@ bool PQueue<T>::isFull() const {
 
 template <typename T>
 void PQueue<T>::enqueue(const int source, const int dest, const int weight) {
-    if (isFull()) return;
+    if (isFull()) {
+        throw std::overflow_error("Queue is full");
+    }
     T* newElement = new T(source, dest, weight);
     int i = size;
     while (i > 0 && array[i - 1]->weight > weight) {
@@ -32,6 +36,8 @@ void PQueue<T>::enqueue(const int source, const int dest, const int weight) {
     size++;
 }
 
+
+// Temp
 // template <typename T>
 // void PQueue<T>::enqueue(int node, int priority) {
 //     if (isFull()) return;
@@ -47,7 +53,9 @@ void PQueue<T>::enqueue(const int source, const int dest, const int weight) {
 
 template <typename T>
 T* PQueue<T>::dequeue() {
-    if (isEmpty()) return nullptr;
+    if (isEmpty()) {
+        throw std::underflow_error("Priority queue is empty. Cannot dequeue element.");
+    }
     T* element = array[0];
     for (int i = 1; i < size; i++) {
         array[i - 1] = array[i];
@@ -58,7 +66,9 @@ T* PQueue<T>::dequeue() {
 
 template <typename T>
 T* PQueue<T>::peek() const {
-    if (isEmpty()) return nullptr;
+    if (isEmpty()) {
+        throw std::underflow_error("Priority queue is empty. Cannot peek element.");
+    }
     return array[0];
 }
 

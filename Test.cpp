@@ -3,6 +3,8 @@
 #include "Algorithms.hpp"
 #include <iostream>
 
+#include "PQueue.hpp"
+
 using namespace std;
 
 TEST_CASE("Test BFS on Graph") {
@@ -174,5 +176,19 @@ TEST_CASE("Test graph edge removal") {
     g.removeEdge(3, 4);
     cout << "Graph after removing edge (3, 4):" << endl;
     g.print_graph();
+}
+
+TEST_CASE("PQ Full") {
+    PQueue<Node> pq (2);
+    pq.enqueue(0,0,0);
+    pq.enqueue(1,0,0);
+    CHECK_THROWS(pq.enqueue(2,0,0));
+}
+
+TEST_CASE("PQ Empty") {
+    PQueue<Node> pq (1);
+    pq.enqueue(0,0,0);
+    pq.dequeue();
+    CHECK_THROWS(pq.dequeue());
 }
 
