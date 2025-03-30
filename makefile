@@ -24,8 +24,9 @@ main: $(MAINS)
 test: $(TESTS)
 	$(CXX) $(CXXFLAGS) -o $(OUTPUTTEST) $(TESTS)
 
-valgrind: $(OUTPUTTEST)
+valgrind: $(OUTPUTTEST) $(OUTPUTMAIN)
 	valgrind --leak-check=full ./$(OUTPUTTEST)
+	valgrind --leak-check=full ./$(OUTPUTMAIN)
 
 
 %.o: %.cpp
@@ -38,7 +39,3 @@ ifeq ($(OS),Windows_NT)
 else
 	rm -f $(OUTPUTMAIN) $(OUTPUTTEST) $(OBJS) $(MAINS) $(TESTS)
 endif
-
-
-
-
