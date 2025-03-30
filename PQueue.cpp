@@ -12,6 +12,7 @@ bool PQueue::isFull() const {
     return size == capacity;
 }
 
+// Overloading because I am lazy to redo it
 void PQueue::enqueue(int source, int dest, int weight) {
     if (isFull()) return;
 

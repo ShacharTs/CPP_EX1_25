@@ -15,6 +15,10 @@ UnionFind::~UnionFind() {
     delete[] rank;
 }
 
+/**
+ * find node in graph
+ * @param x node
+ */
 int UnionFind::find(int x) {
     if (parent[x] != x) {
         parent[x] = find(parent[x]);
@@ -22,6 +26,11 @@ int UnionFind::find(int x) {
     return parent[x];
 }
 
+/**
+ * connect 2 nodes
+ * @param x node
+ * @param y node
+ */
 void UnionFind::unionSets(int x, int y) {
     int rootX = find(x);
     int rootY = find(y);
@@ -39,6 +48,12 @@ void UnionFind::unionSets(int x, int y) {
     }
 }
 
+/**
+ * check if 2 nodes are in the same graph
+ * @param x node
+ * @param y node
+ * @return if both in the same graph
+ */
 bool UnionFind::sameSet(int x, int y) {
     return find(x) == find(y);
 }
