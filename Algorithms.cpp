@@ -50,7 +50,6 @@ namespace graph {
      */
     Graph Algorithms::bfs(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
-
         Graph bfsTree(size);
 
         // Track visited nodes.
@@ -59,13 +58,13 @@ namespace graph {
             visited[i] = false;
         }
 
-        // Use a priority queue for BFS order
+        // Use a priority queue for BFS order.
         PQueue<Node> pq(size);
         int order = 0;
 
-
         visited[source] = true;
-        pq.enqueue(source, order++); // enqueue the source
+        // Enqueue the source
+        pq.enqueue(-1, source, order++);
 
         cout << "Starting BFS from node: " << source << endl;
 
@@ -86,17 +85,18 @@ namespace graph {
                     visited[neighbor] = true;
 
                     // Add edge (current -> neighbor) to the BFS tree.
-                    // Weight can be 'currentNode->weight' or just 1 if unweighted.
+                    // The weight is taken from the original graph's edge.
                     bfsTree.addEdge(current, neighbor, currentNode->weight);
 
                     // Enqueue the neighbor.
-                    pq.enqueue(neighbor, order++);
+                    // Use the current node as the parent.
+                    pq.enqueue(current, neighbor, order++);
                 }
                 currentNode = currentNode->next;
             }
 
-
-            delete front; // free node (found by valgrind)
+            // Free the node returned by dequeue.
+            delete front;
         }
 
         // Clean up memory.
@@ -105,6 +105,7 @@ namespace graph {
         // Return the BFS tree graph.
         return bfsTree;
     }
+
 
 
     // Helper DFS function that builds a DFS tree by adding tree edges
@@ -155,64 +156,73 @@ namespace graph {
      * @param source Node
      */
     Graph Algorithms::dijkstra(Graph &g, const int source) {
-        int size = g.getNumberOfVertices();
-        int* dist = new int[size]; // array of the shortest path
-        int* prev = new int[size]; // array to store the previous node for each node
-        Graph dijkstraGraph(size);
+    int size = g.getNumberOfVertices();
+    int* dist = new int[size];    // Array for shortest path distances.
+    int* prev = new int[size];    // Array to store the previous node for each vertex.
+    Graph dijkstraGraph(size);
 
-        initDistance(dist, size);
-        for (int i = 0; i < size; i++) {
-            prev[i] = -1; // Initialize prev array to -1, indicating no previous node
-        }
-
-        bool* visited = new bool[size];
-        resetVisit(visited, size);
-
-        PQueue<Node> pq(size); // add graph size to PQ
-        dist[source] = 0; // starting point
-
-        for (int i = 0; i < size; i++) {
-            const int temp = minDist(dist, visited, size);
-            // No valid node left to process, so exit the loop.
-            if (temp < 0) {
-                break;
-            }
-            visited[temp] = true;
-            Node* current = g.adjacencyList[temp];
-            while (current != nullptr) {
-                const int neighbor = current->dest; // neighbor node
-                const int weight = current->weight; // neighbor weight
-                    if (weight < 0 ) {
-                        throw std::invalid_argument("Negative weight");
-                    }
-                // checks a few conditions
-                // 1) if node already visited
-                // 2) checks if (the current dist path plus new weight) is less than a neighbor total path
-                if (!visited[neighbor] && dist[temp] + weight < dist[neighbor]) {
-                    dist[neighbor] = dist[temp] + weight; // add the new weight to the dist
-                    prev[neighbor] = temp; // update the previous node for this neighbor
-                    pq.enqueue(neighbor, dist[neighbor]);
-                    dijkstraGraph.addEdge(source, neighbor, weight);
-                }
-                current = current->next; // go to the next node
-            }
-            delete current;
-        }
-
-        // Output the shortest distances and paths from the source node
-        int dest = size - 1;
-        cout << "Shortest path from " << source << " to " << dest << ": ";
-        printPath(prev, dest);
-        cout << " (distance: " << dist[dest] << ")" << endl;
-
-
-
-        // free memory
-        delete[] dist;
-        delete[] visited;
-        delete[] prev;
-        return dijkstraGraph;
+    initDistance(dist, size);
+    for (int i = 0; i < size; i++) {
+        prev[i] = -1; // Initialize prev array to -1, indicating no previous node.
     }
+
+    bool* visited = new bool[size];
+    resetVisit(visited, size);
+
+    PQueue<Node> pq(size); // Priority queue with given capacity.
+    dist[source] = 0;     // Starting point.
+
+    // Enqueue the starting vertex. If enqueue expects (source, dest, weight),
+    // pass -1 for the source since it has no predecessor.
+    pq.enqueue(-1, source, dist[source]);
+
+    for (int i = 0; i < size; i++) {
+        const int temp = minDist(dist, visited, size);
+        // No valid vertex left to process.
+        if (temp < 0) {
+            break;
+        }
+        visited[temp] = true;
+        Node* current = g.adjacencyList[temp];
+
+        while (current != nullptr) {
+            const int neighbor = current->dest;   // Neighbor vertex.
+            const int weight = current->weight;     // Edge weight.
+
+            if (weight < 0) {
+                delete[] dist;
+                delete[] visited;
+                delete[] prev;
+                throw std::invalid_argument("Negative weight");
+            }
+
+            // Relaxation step: if the neighbor hasn't been visited and we find a shorter path.
+            if (!visited[neighbor] && dist[temp] + weight < dist[neighbor]) {
+                dist[neighbor] = dist[temp] + weight;  // Update distance.
+                prev[neighbor] = temp;                // Update previous node.
+                // Enqueue updated neighbor using three parameters.
+                pq.enqueue(temp, neighbor, dist[neighbor]);
+                dijkstraGraph.addEdge(temp, neighbor, weight);
+            }
+            current = current->next;  // Move to the next adjacent node.
+        }
+        // DO NOT delete 'current' here because it points to nodes in the graph's adjacency list.
+    }
+
+    // Output the shortest path and distance from the source to the last vertex.
+    int dest = size - 1;
+    cout << "Shortest path from " << source << " to " << dest << ": ";
+    printPath(prev, dest);
+    cout << " (distance: " << dist[dest] << ")" << endl;
+
+    // Free allocated memory.
+    delete[] dist;
+    delete[] visited;
+    delete[] prev;
+
+    return dijkstraGraph;
+}
+
 
     /**
      * Returns the MST of the graph using Prim's algorithm.
@@ -235,11 +245,11 @@ namespace graph {
 
         PQueue<Node> pq(size);
         key[0] = 0;
-        pq.enqueue(0, key[0]);
+        pq.enqueue(-1,0, key[0]);
 
         int totalMSTCost = 0;
         while (!pq.isEmpty()) {
-            auto current = pq.dequeue();
+            Node* current = pq.dequeue();
             int u = current->dest;
             delete current;
 
@@ -258,7 +268,7 @@ namespace graph {
                 if (!visited[v] && w < key[v]) {
                     key[v] = w;
                     parent[v] = u;
-                    pq.enqueue(v, key[v]);
+                    pq.enqueue(u,v, key[v]);
                 }
                 adj = adj->next;
             }

@@ -32,18 +32,18 @@ void PQueue<T>::enqueue(const int source, const int dest, const int weight) {
     size++;
 }
 
-template <typename T>
-void PQueue<T>::enqueue(int node, int priority) {
-    if (isFull()) return;
-    T* newElement = new T(-1, node, priority);
-    int i = size - 1;
-    while (i >= 0 && array[i]->weight > priority) {
-        array[i + 1] = array[i];
-        i--;
-    }
-    array[i + 1] = newElement;
-    size++;
-}
+// template <typename T>
+// void PQueue<T>::enqueue(int node, int priority) {
+//     if (isFull()) return;
+//     T* newElement = new T(-1, node, priority);
+//     int i = size - 1;
+//     while (i >= 0 && array[i]->weight > priority) {
+//         array[i + 1] = array[i];
+//         i--;
+//     }
+//     array[i + 1] = newElement;
+//     size++;
+// }
 
 template <typename T>
 T* PQueue<T>::dequeue() {
