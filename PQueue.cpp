@@ -1,23 +1,28 @@
 #include "PQueue.hpp"
 
-PQueue::PQueue(int capacity) :  size(0), capacity(capacity) {
-    array = new Node*[capacity];
+// using generic class for better uses
+template class PQueue<Node>;
+
+// Constructor
+template <typename T>
+PQueue<T>::PQueue(int capacity) : size(0), capacity(capacity) {
+    array = new T*[capacity];
 }
 
-bool PQueue::isEmpty() const {
+template <typename T>
+bool PQueue<T>::isEmpty() const {
     return size == 0;
 }
 
-bool PQueue::isFull() const {
+template <typename T>
+bool PQueue<T>::isFull() const {
     return size == capacity;
 }
 
-// Overloading because I am lazy to redo it
-void PQueue::enqueue(int source, int dest, int weight) {
+template <typename T>
+void PQueue<T>::enqueue(const int source, const int dest, const int weight) {
     if (isFull()) return;
-
-    Node* newElement = new Node(source, dest, weight);
-
+    T* newElement = new T(source, dest, weight);
     int i = size;
     while (i > 0 && array[i - 1]->weight > weight) {
         array[i] = array[i - 1];
@@ -27,13 +32,10 @@ void PQueue::enqueue(int source, int dest, int weight) {
     size++;
 }
 
-
-void PQueue::enqueue(const int node, const int priority) {
-    if (isFull()) {
-        return;
-    }
-
-    Node* newElement = new Node(-1, node, priority);
+template <typename T>
+void PQueue<T>::enqueue(int node, int priority) {
+    if (isFull()) return;
+    T* newElement = new T(-1, node, priority);
     int i = size - 1;
     while (i >= 0 && array[i]->weight > priority) {
         array[i + 1] = array[i];
@@ -41,15 +43,12 @@ void PQueue::enqueue(const int node, const int priority) {
     }
     array[i + 1] = newElement;
     size++;
-
 }
 
-Node* PQueue::dequeue() {
-    if (isEmpty()) {
-        return nullptr;
-    }
-    Node* element = array[0];
-    // shift all elements to the left
+template <typename T>
+T* PQueue<T>::dequeue() {
+    if (isEmpty()) return nullptr;
+    T* element = array[0];
     for (int i = 1; i < size; i++) {
         array[i - 1] = array[i];
     }
@@ -57,25 +56,29 @@ Node* PQueue::dequeue() {
     return element;
 }
 
-
-Node* PQueue::peek() const {
-    if (isEmpty()) {
-        return nullptr;
-    }
+template <typename T>
+T* PQueue<T>::peek() const {
+    if (isEmpty()) return nullptr;
     return array[0];
 }
 
-int PQueue::getDest(const Node* element) const {
-    return element->dest;
-}
+// template <typename T>
+// int PQueue<T>::getDest(const T* element) const {
+//     return element->dest;
+// }
+//
+// template <typename T>
+// int PQueue<T>::getWeight(const T* element) const {
+//     return element->weight;
+// }
 
-int PQueue::getWeight(const Node* element) const {
-    return element->weight;
-}
-
-PQueue::~PQueue() {
+template <typename T>
+PQueue<T>::~PQueue() {
     for (int i = 0; i < size; ++i) {
         delete array[i];
     }
     delete[] array;
 }
+
+
+

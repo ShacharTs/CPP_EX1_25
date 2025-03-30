@@ -3,6 +3,7 @@
 #include "Graph.hpp"
 
 
+
 namespace graph {
     class Algorithms {
     public:
@@ -11,6 +12,7 @@ namespace graph {
         Graph static dijkstra (Graph& g, int source);
         Graph static prim (Graph& g);
         Graph static kruskal(Graph& g);
+
     };
 
 }

@@ -1,6 +1,7 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 #include "Node.hpp"
+#include "UnionFind.hpp"
 
 
 namespace graph {
@@ -22,6 +23,7 @@ class Graph {
         void removeEdge(int src, int dest);
         void print_graph();
         int getNumberOfVertices();
+
 
     };
 

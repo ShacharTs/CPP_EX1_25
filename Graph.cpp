@@ -2,6 +2,7 @@
 #include "Graph.hpp"
 
 
+
 using namespace std;
 
 namespace graph {
@@ -106,6 +107,8 @@ namespace graph {
                  cout << "NULL" << endl;
              }
         }
+
+
 
         int Graph::getNumberOfVertices() {
              return this->numVertices;

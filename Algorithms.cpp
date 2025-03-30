@@ -1,8 +1,7 @@
 #include "Algorithms.hpp"
 #include "PQueue.hpp"
-#include <climits>
-#include "UnionFind.hpp"
 #include <iostream>
+#include <climits>
 
 
 using namespace  std;
@@ -61,7 +60,7 @@ namespace graph {
         }
 
         // Use a priority queue for BFS order
-        PQueue pq(size);
+        PQueue<Node> pq(size);
         int order = 0;
 
 
@@ -97,7 +96,7 @@ namespace graph {
             }
 
 
-            delete front; // thank you valgrind :D
+            delete front; // free node (found by valgrind)
         }
 
         // Clean up memory.
@@ -106,11 +105,6 @@ namespace graph {
         // Return the BFS tree graph.
         return bfsTree;
     }
-
-
-
-
-
 
 
     // Helper DFS function that builds a DFS tree by adding tree edges
@@ -174,13 +168,13 @@ namespace graph {
         bool* visited = new bool[size];
         resetVisit(visited, size);
 
-        PQueue pq(size); // add graph size to PQ
+        PQueue<Node> pq(size); // add graph size to PQ
         dist[source] = 0; // starting point
 
         for (int i = 0; i < size; i++) {
             const int temp = minDist(dist, visited, size);
-            if (temp == -1) { // if dist is negative, dijkstra will fail
-                cout << "Found negative dist, dijkstra will fail" << endl;
+            // No valid node left to process, so exit the loop.
+            if (temp < 0) {
                 break;
             }
             visited[temp] = true;
@@ -188,6 +182,9 @@ namespace graph {
             while (current != nullptr) {
                 const int neighbor = current->dest; // neighbor node
                 const int weight = current->weight; // neighbor weight
+                    if (weight < 0 ) {
+                        throw std::invalid_argument("Negative weight");
+                    }
                 // checks a few conditions
                 // 1) if node already visited
                 // 2) checks if (the current dist path plus new weight) is less than a neighbor total path
@@ -236,7 +233,7 @@ namespace graph {
             parent[i] = -1;
         }
 
-        PQueue pq(size);
+        PQueue<Node> pq(size);
         key[0] = 0;
         pq.enqueue(0, key[0]);
 
@@ -293,7 +290,7 @@ namespace graph {
     Graph Algorithms::kruskal(Graph &g) {
         const int size = g.getNumberOfVertices();
         Graph mst(size);
-        PQueue pq(size * size);
+        PQueue<Node> pq(size * size);
         UnionFind uf(size);
         int totalWeight = 0;
 
@@ -327,6 +324,8 @@ namespace graph {
         cout << "Total weight of MST: " << totalWeight << endl;
         return mst;
     }
+
+
 
 
 }
