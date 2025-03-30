@@ -52,7 +52,6 @@ namespace graph {
     Graph Algorithms::bfs(Graph &g, const int source) {
         const int size = g.getNumberOfVertices();
 
-        // Create a BFS tree graph (initially empty).
         Graph bfsTree(size);
 
         // Track visited nodes.
@@ -61,12 +60,11 @@ namespace graph {
             visited[i] = false;
         }
 
-        // Use a priority queue for BFS order.
-        // (You might prefer a normal queue for BFS, but let's keep your PQueue.)
+        // Use a priority queue for BFS order
         PQueue pq(size);
         int order = 0;
 
-        // Start BFS from 'source'.
+
         visited[source] = true;
         pq.enqueue(source, order++); // enqueue the source
 
@@ -98,8 +96,8 @@ namespace graph {
                 currentNode = currentNode->next;
             }
 
-            // Delete the node we dequeued to avoid a memory leak.
-            delete front;
+
+            delete front; // thank you valgrind :D
         }
 
         // Clean up memory.
@@ -287,11 +285,11 @@ namespace graph {
 
 
     /**
- * Returns the MST of the graph using Kruskal's algorithm.
- *
- * @param g The input graph.
- * @return The MST as a new graph.
- */
+     * Returns the MST of the graph using Kruskal's algorithm.
+     *
+     * @param g The input graph.
+     * @return The MST as a new graph.
+    */
     Graph Algorithms::kruskal(Graph &g) {
         const int size = g.getNumberOfVertices();
         Graph mst(size);
