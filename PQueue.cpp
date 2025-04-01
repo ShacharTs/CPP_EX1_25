@@ -1,9 +1,9 @@
 #include "PQueue.hpp"
+#include "Node.hpp"
 
 #include <stdexcept>
 
-// using generic class for better uses
-template class PQueue<Node>;
+
 
 // Constructor
 template <typename T>
@@ -90,5 +90,6 @@ PQueue<T>::~PQueue() {
     delete[] array;
 }
 
-
+// using generic class for better uses
+template class PQueue<Node>;
 

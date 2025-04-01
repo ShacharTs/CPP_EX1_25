@@ -1,5 +1,6 @@
 #include "Algorithms.hpp"
 #include "PQueue.hpp"
+#include "UnionFind.hpp"
 #include <iostream>
 #include <climits>
 

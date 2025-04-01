@@ -1,4 +1,4 @@
-CXX = g++
+CXX = clang++
 CXXFLAGS = -Wall -Werror -g -std=c++17
 
 OUTPUTMAIN = main
