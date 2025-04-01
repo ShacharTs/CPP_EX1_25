@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "Algorithms.hpp"
 
 
@@ -9,9 +8,12 @@ using namespace std;
 
 
 /**
- * Notes: this code was written in C++ version 17
+ * Notes: This code was written in C++ version 17
  * g++ version: g++ (Rev3, Built by MSYS2 project) 14.2.0
- * from testing this code will NOT WORK on a lower version of c++ or g++
+ * clang version 20.1.1, Target: x86_64-w64-windows-gnu, Thread model: posix InstalledDir: C:/msys64/mingw64/bin
+ * Ubuntu clang version 18.1.3 (1ubuntu1)
+ * The MAKEFILE run on CLANG LASTEST VERSION and C++ Version 17
+ * from testing this code will NOT WORK on a lower version of c++ or g++ or clang
  */
 
 
