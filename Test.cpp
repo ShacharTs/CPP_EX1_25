@@ -178,7 +178,7 @@ TEST_CASE("Test graph edge removal") {
     g.print_graph();
 }
 
-TEST_CASE("PQ Full") {
+TEST_CASE("PQ Full ") {
     PQueue<Node> pq (2);
     pq.enqueue(0,0,0);
     pq.enqueue(1,0,0);
