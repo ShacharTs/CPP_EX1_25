@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -Wall -Werror -g -std=c++17
+CXXFLAGS = -Wall -Werror -g -std=c++17 -gdwarf-2 # Internet said to add -gdwarf-2 if clang++ + valgrind not working
 
 OUTPUTMAIN = main
 OUTPUTTEST = test
